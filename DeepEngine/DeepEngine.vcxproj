@@ -145,7 +145,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActivationFunctionInterface.h" />
+    <ClInclude Include="FunctionInterface.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="ReluActivationFunction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

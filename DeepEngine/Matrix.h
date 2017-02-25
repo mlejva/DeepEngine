@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include "FunctionInterface.h"
 
 template <class T>
 class Matrix {
@@ -167,13 +168,20 @@ public:
 	hiterator h_begin(size_type row) { return H_Iterator<T*, T>(*data_ + width_ * row, width_, height_); }
 	hiterator h_end(size_type row) { return H_Iterator<T*, T>(*data_ + width_ * row + width_, width_, height_); }
 
-	T& GetElement(std::size_t x, std::size_t y) const { return data_[x][y]; };
-	void SetElement(std::size_t x, std::size_t y, const T value) { data_[x][y] = value; };
+	T& GetElement(size_type x, size_type y) const { return data_[x][y]; };
+	void SetElement(size_type x, size_type y, const T value) { data_[x][y] = value; };
 
 
-	std::size_t getWidth() const { return width_; }
-	std::size_t getHeight() const { return height_; }
+	size_type getWidth() const { return width_; }
+	size_type getHeight() const { return height_; }
 
+	template <typename FuncType>
+	void ApplyFunctionElementWise() { 
+		std::for_each(this->begin(), this->end(), [](T& el) {
+			FuncType func;
+			el = func.apply(el);
+		});
+	}
 	////////////////// PRIVATE METHODS //////////////////
 private:
 	storage_type CreateMatrix_(const size_type height, const size_type width) {
@@ -189,8 +197,8 @@ private:
 	////////////////// PUBLIC MATRIX OPERATORS OVERRIDES //////////////////
 public:
 	friend std::ostream& operator<<(std::ostream& s, const Matrix<T>& m) {
-		for (std::size_t i = 0; i < m.getHeight(); ++i) {			
-			for (std::size_t j = 0; j < m.getWidth(); ++j) {
+		for (size_type i = 0; i < m.getHeight(); ++i) {			
+			for (size_type j = 0; j < m.getWidth(); ++j) {
 				if (j != m.getWidth() - 1)
 					s << m.GetElement(i, j) << "\t";
 				else
@@ -208,8 +216,8 @@ public:
 	// TODO: Wrong size of matrices exception for operators bellow
 	Matrix<T> operator*(const Matrix<T>& m) const {
 		Matrix<T> newMatrix_(this->height_, m.getWidth());
-		for (std::size_t row = 0; row < newMatrix_.getHeight(); ++row) {
-			for (std::size_t column = 0; column < newMatrix_.getWidth(); ++column) {
+		for (size_type row = 0; row < newMatrix_.getHeight(); ++row) {
+			for (size_type column = 0; column < newMatrix_.getWidth(); ++column) {
 				T newValue_ = 0;
 				for (size_type inner = 0; inner < this->width_;  ++inner) {
 					 newValue_ += this->GetElement(row, inner) * m.GetElement(inner, column);
@@ -220,10 +228,11 @@ public:
 		return newMatrix_;
 	}
 
-	Matrix<T> operator*(const T& v) const { // Multiplication applied element-wise
+	// Multiplication applied element-wise
+	Matrix<T> operator*(const T& v) const { 
 		Matrix<T> newMatrix_(this->height_, this->width_);
-		for (std::size_t i = 0; i < this->height_; ++i) {
-			for (std::size_t j = 0; j < this->width_; ++j) {
+		for (size_type i = 0; i < this->height_; ++i) {
+			for (size_type j = 0; j < this->width_; ++j) {
 				T newValue_ = GetElement(i, j) * v;
 				newMatrix_.SetElement(i, j, newValue_);
 			}
@@ -233,8 +242,8 @@ public:
 
 	Matrix<T> operator+(const Matrix<T>& m) const {		
 		Matrix<T> newMatrix_(this->height_, this->width_);
-		for (std::size_t i = 0; i < this->height_; ++i) {
-			for (std::size_t j = 0; j < this->width_; ++j) {
+		for (size_type i = 0; i < this->height_; ++i) {
+			for (size_type j = 0; j < this->width_; ++j) {
 				T newValue_ = GetElement(i, j) + m.GetElement(i, j);
 				newMatrix_.SetElement(i, j, newValue_);
 			}
@@ -242,10 +251,11 @@ public:
 		return newMatrix_;
 	}
 
-	Matrix<T> operator+(const T& v) const { // Summation applied element-wise
+	// Summation applied element-wise
+	Matrix<T> operator+(const T& v) const {
 		Matrix<T> newMatrix_(this->height_, this->width_);
-		for (std::size_t i = 0; i < this->height_; ++i) {
-			for (std::size_t j = 0; j < this->width_; ++j) {
+		for (size_type i = 0; i < this->height_; ++i) {
+			for (size_type j = 0; j < this->width_; ++j) {
 				T newValue_ = GetElement(i, j) + v;
 				newMatrix_.SetElement(i, j, newValue_);
 			}
@@ -255,8 +265,8 @@ public:
 
 	Matrix<T> operator-(const Matrix<T>& m) const {
 		Matrix<T> newMatrix_(this->height_, this->width_);
-		for (std::size_t i = 0; i < this->height_; ++i) {
-			for (std::size_t j = 0; j < this->width_; ++j) {
+		for (size_type i = 0; i < this->height_; ++i) {
+			for (size_type j = 0; j < this->width_; ++j) {
 				T newValue_ = GetElement(i, j) - m.GetElement(i, j);
 				newMatrix_.SetElement(i, j, newValue_);
 			}
@@ -264,10 +274,11 @@ public:
 		return newMatrix_;
 	}
 
-	Matrix<T> operator-(const T& v) const { // Subtraction applied element-wise
+	// Subtraction applied element-wise
+	Matrix<T> operator-(const T& v) const { 
 		Matrix<T> newMatrix_(this->height_, this->width_);
-		for (std::size_t i = 0; i < this->height_; ++i) {
-			for (std::size_t j = 0; j < this->width_; ++j) {
+		for (size_type i = 0; i < this->height_; ++i) {
+			for (size_type j = 0; j < this->width_; ++j) {
 				T newValue_ = GetElement(i, j) - v;
 				newMatrix_.SetElement(i, j, newValue_);
 			}
