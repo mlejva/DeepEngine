@@ -15,6 +15,6 @@ public:
 	{
 	}
 
-	virtual Matrix<T> apply(Matrix<T>& predicted, Matrix<T>& expected) = 0;
+	virtual T apply(Matrix<T>& predicted, Matrix<T>& expected) = 0;
 };
 

@@ -17,13 +17,20 @@ int main(int argc, char* argv[]) {
 
 	//std::cout << m1 << std::endl;
 	//std::cout << m2 << std::endl;
-	std::cout << m3 << std::endl;
+	/*std::cout << m3 << std::endl;
 	m3.ApplyFunctionElementWise<TanhActivationFunction<float>>();
-	std::cout << m3 << std::endl;
+	std::cout << m3 << std::endl;*/
 
-	Matrix<int> y1(3, 1);
-	Matrix<int> y2(3, 1);
-	
+	Matrix<float> y1(3, 1);
+	Matrix<float> y2(3, 1);
+	y1.RandomInitialization();
+	y2.RandomInitialization();
+	std::cout << y1 << std::endl;
+	std::cout << y2 << std::endl;
+
+
+	MSELossFunction<float> mse;
+	std::cout << mse.apply(y1, y2) << std::endl;
 
 	system("pause");
 	return 0;

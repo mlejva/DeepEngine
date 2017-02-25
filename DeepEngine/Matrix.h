@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <random>
+#include <cmath>
 #include "FunctionInterface.h"
 
 template <class T>
@@ -180,9 +182,25 @@ public:
 
 	template <typename FuncType>
 	void ApplyFunctionElementWise() { 
-		std::for_each(this->begin(), this->end(), [](T& el) {
-			FuncType func;
-			el = func.apply(el);
+		std::for_each(this->begin(), this->end(), [](T& el_) {
+			FuncType func_;
+			el_ = func_.apply(el_);
+		});
+	}
+
+	void RandomInitialization() {
+		std::random_device rd_; // Obtain a random number from hardware
+		// A Mersenne Twister pseudo-random generator of 32-bit numbers 
+		// with a state size of 19937 bits.
+		std::mt19937 gen_(rd_()); // Seed the generator
+		// Xavier initialization
+		T start_ = -(sqrt(6 / (width_ + height_)));
+		T end_ = (sqrt(6 / (width_ + height_)));
+		// TODO: only normal distribution for real numbers
+		std::uniform_real_distribution<> distr_(start_, end_); // Define the range
+
+		std::for_each(this->begin(), this->end(), [&](T& el_) {
+			el_ = distr_(gen_);
 		});
 	}
 	////////////////// PRIVATE METHODS //////////////////
