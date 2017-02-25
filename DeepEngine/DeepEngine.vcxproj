@@ -147,7 +147,9 @@
   <ItemGroup>
     <ClInclude Include="ActivationFunctionInterface.h" />
     <ClInclude Include="FunctionInterface.h" />
+    <ClInclude Include="LossFunctionInterface.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MSELossFunction.h" />
     <ClInclude Include="ReluActivationFunction.h" />
     <ClInclude Include="SigmoidActivationFunction.h" />
     <ClInclude Include="TanhActivationFunction.h" />

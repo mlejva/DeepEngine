@@ -3,6 +3,7 @@
 #include "ReluActivationFunction.h"
 #include "SigmoidActivationFunction.h"
 #include "TanhActivationFunction.h"
+#include "MSELossFunction.h"
 
 int main(int argc, char* argv[]) {
 	Matrix<float> m1(3, 2);
@@ -19,6 +20,10 @@ int main(int argc, char* argv[]) {
 	std::cout << m3 << std::endl;
 	m3.ApplyFunctionElementWise<TanhActivationFunction<float>>();
 	std::cout << m3 << std::endl;
+
+	Matrix<int> y1(3, 1);
+	Matrix<int> y2(3, 1);
+	
 
 	system("pause");
 	return 0;

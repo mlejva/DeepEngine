@@ -12,7 +12,5 @@ public:
 	virtual ~FunctionInterface()
 	{
 	}
-
-	virtual T apply(T& param) = 0;
 };
 

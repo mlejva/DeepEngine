@@ -38,5 +38,11 @@
     <ClInclude Include="TanhActivationFunction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LossFunctionInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MSELossFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

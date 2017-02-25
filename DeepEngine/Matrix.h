@@ -140,7 +140,10 @@ public:
 		height_ = m.height_;
 
 		data_ = CreateMatrix_(height_, width_);
+#pragma warning(push)
+#pragma warning(disable:4996)
 		std::copy(&m.data_[0][0], &m.data_[0][0] + width_ * height_, &data_[0][0]);
+#pragma warning(pop)
 	}
 
 	~Matrix() {
