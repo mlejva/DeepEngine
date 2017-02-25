@@ -13,6 +13,6 @@ public:
 	{
 	}
 
-	virtual T apply(T& val) = 0;
+	virtual T apply(T& param) = 0;
 };
 

@@ -32,5 +32,11 @@
     <ClInclude Include="ReluActivationFunction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SigmoidActivationFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TanhActivationFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

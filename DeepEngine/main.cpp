@@ -1,10 +1,12 @@
 #include <iostream>
 #include "Matrix.h"
 #include "ReluActivationFunction.h"
+#include "SigmoidActivationFunction.h"
+#include "TanhActivationFunction.h"
 
 int main(int argc, char* argv[]) {
-	Matrix<long> m1(3, 2);
-	Matrix<long> m2(2, 2);
+	Matrix<float> m1(3, 2);
+	Matrix<float> m2(2, 2);
 	
 	m1.SetElement(1, 0, -5);
 	m1.SetElement(1, 1, -2);
@@ -15,7 +17,7 @@ int main(int argc, char* argv[]) {
 	//std::cout << m1 << std::endl;
 	//std::cout << m2 << std::endl;
 	std::cout << m3 << std::endl;
-	m3.ApplyFunctionElementWise<ReluActivationFunction<long>>();
+	m3.ApplyFunctionElementWise<TanhActivationFunction<float>>();
 	std::cout << m3 << std::endl;
 
 	system("pause");

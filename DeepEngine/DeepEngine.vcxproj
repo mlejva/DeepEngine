@@ -149,6 +149,8 @@
     <ClInclude Include="FunctionInterface.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="ReluActivationFunction.h" />
+    <ClInclude Include="SigmoidActivationFunction.h" />
+    <ClInclude Include="TanhActivationFunction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

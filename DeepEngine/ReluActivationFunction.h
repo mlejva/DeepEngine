@@ -3,7 +3,7 @@
 #include "ActivationFunctionInterface.h"
 
 template <typename T>
-class ReluActivationFunction : ActivationFunctionInterface<T>
+class ReluActivationFunction : public ActivationFunctionInterface<T>
 {
 public:
 
@@ -11,12 +11,12 @@ public:
 	{
 	}
 
-	virtual ~ReluActivationFunction()
+	~ReluActivationFunction()
 	{
 	}
 
-	T apply(T& val) {
-		return std::max<T>(0, val);
+	T apply(T& param) {
+		return std::max<T>(0, param);
 	}
 };
 
