@@ -7,13 +7,18 @@
 
 int main(int argc, char* argv[]) {
 	Matrix<float> m1(3, 2);
-	Matrix<float> m2(2, 2);
+	Matrix<float> m2(3, 2);
 	
 	m1.SetElement(1, 0, -5);
 	m1.SetElement(1, 1, -2);
 	m2.SetElement(0, 1, 5);
-
-	auto m3 = m1 + 4;
+	
+	try {
+		auto m3 = m1 * m2;
+	}
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
 
 	//std::cout << m1 << std::endl;
 	//std::cout << m2 << std::endl;

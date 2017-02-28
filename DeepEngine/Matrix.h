@@ -7,7 +7,19 @@
 #include <algorithm>
 #include <random>
 #include <cmath>
+#include <exception>
 #include "FunctionInterface.h"
+
+class WrongMatrixDimensionException : public std::exception {
+private:
+		std::string message_;
+public:
+	explicit WrongMatrixDimensionException(const std::string& message) : message_(message) { }
+	virtual const char* what() const throw() {
+		auto output_ = "Wrong matrix dimension.\n" + message_;
+		return output_.c_str();
+	}
+};
 
 template <class T>
 class Matrix {
@@ -196,7 +208,7 @@ public:
 		// Xavier initialization
 		T start_ = -(sqrt(6 / (width_ + height_)));
 		T end_ = (sqrt(6 / (width_ + height_)));
-		// TODO: only normal distribution for real numbers
+		// TODO: Now works only normal distribution for real numbers
 		std::uniform_real_distribution<> distr_(start_, end_); // Define the range
 
 		std::for_each(this->begin(), this->end(), [&](T& el_) {
@@ -211,7 +223,6 @@ private:
 
 		for (size_type row = 0; row < height; ++row)
 			d[row] = &block[row * width];
-
 		return d;
 	}
 
@@ -236,6 +247,13 @@ public:
 	
 	// TODO: Wrong size of matrices exception for operators bellow
 	Matrix<T> operator*(const Matrix<T>& m) const {
+
+		if (this->width_ != m.getHeight()) {
+			std::string msg_ = "Left-hand matrix must have same width as is the height of right-hand matrix.";
+			WrongMatrixDimensionException mex_(msg_);
+			throw mex_;
+		}
+
 		Matrix<T> newMatrix_(this->height_, m.getWidth());
 		for (size_type row = 0; row < newMatrix_.getHeight(); ++row) {
 			for (size_type column = 0; column < newMatrix_.getWidth(); ++column) {
