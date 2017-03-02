@@ -4,9 +4,10 @@
 #include "SigmoidActivationFunction.h"
 #include "TanhActivationFunction.h"
 #include "MSELossFunction.h"
+#include "Vector.h"
 
 int main() {
-	Matrix<float> m1(3, 2);
+	Matrix<float> m1(3, 3);
 	Matrix<float> m2(3, 2);
 	
 	m1.SetElement(1, 0, -5);
@@ -14,7 +15,7 @@ int main() {
 	m2.SetElement(0, 1, 5);
 	
 	try {
-		auto m3 = m1 * m2;
+		auto m3 = m1 * m2;		
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
@@ -37,7 +38,14 @@ int main() {
 	MSELossFunction<float> mse;
 	std::cout << mse.apply(y1, y2) << std::endl;
 
-	system("pause");
+	std::cout << "-------" << std::endl;
+
+	Vector<float> v1(5);
+	v1.RandomInitialization();
+	std::cout << v1 << std::endl;
+
+	//std::cout << "Press any key to continue..." << std::endl;
+	//std::cin.get();
 	return 0;
 }
 

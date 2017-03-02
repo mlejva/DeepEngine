@@ -1,5 +1,22 @@
-- Zmenit raw pointery na smart pointery
-- Vyresit warningy od Clangu
-- Pridat const metody pro Matrix.h
-- auto& vs auto&&
-- T& vs T&&
+❌ - nevyreseno
+❗ - docasne reseni (warning)
+✅ - vyreseno
+
+
+Minor:
+- ❌ zmenit raw pointery na smart pointery
+- ❗ vyresit warningy od Clangu
+    - potlaceno prepinacem "-w" - tj. vypnute warningy
+- ❌ pridat const metody pro Matrix.h
+- ❌ auto& vs auto&&
+- ❌ T& vs T&&
+- ❗ metoda RandomInitialization() uvnitr Matrix.h je definovana pouze pro float typy
+    - kdyz se zavola s jinym typem, tak se provede implicitni konverze
+
+Main:
+- ❌ vector trida jako potomek Matrix
+- ❌ jednotlive vrstvy
+- ❌ postavit computational graf
+- ❌ forward vypocet v grafu
+- ❌ backprop vypocet v grafu
+- ❌ gradient descent

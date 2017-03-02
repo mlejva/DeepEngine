@@ -248,7 +248,7 @@ public:
 	// TODO: Wrong size of matrices exception for operators bellow
 	Matrix<T> operator*(const Matrix<T>& m) const {
 		if (this->width_ != m.getHeight()) {
-			std::string msg_ = "The left-hand matrix must have same width as is the height of the right-hand matrix.";
+			std::string msg_ = "The left-hand matrix must have the same width as is the height of the right-hand matrix.";
 			WrongMatrixDimensionException ex_(msg_);
 			throw ex_;
 		}
@@ -280,7 +280,7 @@ public:
 
 	Matrix<T> operator+(const Matrix<T>& m) const {		
 		if ((this->width_ != m.getWidth()) || (this->height_ != m.getHeight())) {
-			std::string msg_ = "The left-hand matrix must have same dimensions as the right-hand matrix.";
+			std::string msg_ = "The left-hand matrix must have the same dimensions as the right-hand matrix.";
 			WrongMatrixDimensionException ex_(msg_);
 			throw ex_;
 		}
@@ -309,7 +309,7 @@ public:
 
 	Matrix<T> operator-(const Matrix<T>& m) const {
 		if ((this->width_ != m.getWidth()) || (this->height_ != m.getHeight())) {
-			std::string msg_ = "The left-hand matrix must have same dimensions as the right-hand matrix.";
+			std::string msg_ = "The left-hand matrix must have the same dimensions as the right-hand matrix.";
 			WrongMatrixDimensionException ex_(msg_);
 			throw ex_;
 		}
