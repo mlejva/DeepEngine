@@ -5,6 +5,8 @@
 
 # Files for proper configuration of VS Code for C++
 .vscode
+a.out
+DeepEngine/a.out
 
 # User-specific files
 *.suo
