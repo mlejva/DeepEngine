@@ -1,0 +1,5 @@
+- Zmenit raw pointery na smart pointery
+- Vyresit warningy od Clangu
+- Pridat const metody pro Matrix.h
+- auto& vs auto&&
+- T& vs T&&
