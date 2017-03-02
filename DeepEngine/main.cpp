@@ -5,7 +5,7 @@
 #include "TanhActivationFunction.h"
 #include "MSELossFunction.h"
 
-int main(int argc, char* argv[]) {
+int main() {
 	Matrix<float> m1(3, 2);
 	Matrix<float> m2(3, 2);
 	

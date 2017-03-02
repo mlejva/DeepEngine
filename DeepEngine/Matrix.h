@@ -68,7 +68,7 @@ private:
 		Iterator<P, V> operator++(int) {
 			Iterator<P, V> tmp(*this);
 			++itData_;
-			return tmp
+			return tmp;
 		}
 
 		Iterator<P, V>& operator= (V value) {
@@ -154,10 +154,10 @@ public:
 		height_ = m.height_;
 
 		data_ = CreateMatrix_(height_, width_);
-#pragma warning(push)
-#pragma warning(disable:4996)
+//#pragma warning(push)
+//#pragma warning(disable:4996)
 		std::copy(&m.data_[0][0], &m.data_[0][0] + width_ * height_, &data_[0][0]);
-#pragma warning(pop)
+//#pragma warning(pop)
 	}
 
 	~Matrix() {
@@ -247,11 +247,10 @@ public:
 	
 	// TODO: Wrong size of matrices exception for operators bellow
 	Matrix<T> operator*(const Matrix<T>& m) const {
-
 		if (this->width_ != m.getHeight()) {
-			std::string msg_ = "Left-hand matrix must have same width as is the height of right-hand matrix.";
-			WrongMatrixDimensionException mex_(msg_);
-			throw mex_;
+			std::string msg_ = "The left-hand matrix must have same width as is the height of the right-hand matrix.";
+			WrongMatrixDimensionException ex_(msg_);
+			throw ex_;
 		}
 
 		Matrix<T> newMatrix_(this->height_, m.getWidth());
@@ -280,6 +279,12 @@ public:
 	}
 
 	Matrix<T> operator+(const Matrix<T>& m) const {		
+		if ((this->width_ != m.getWidth()) || (this->height_ != m.getHeight())) {
+			std::string msg_ = "The left-hand matrix must have same dimensions as the right-hand matrix.";
+			WrongMatrixDimensionException ex_(msg_);
+			throw ex_;
+		}
+
 		Matrix<T> newMatrix_(this->height_, this->width_);
 		for (size_type i = 0; i < this->height_; ++i) {
 			for (size_type j = 0; j < this->width_; ++j) {
@@ -303,6 +308,12 @@ public:
 	}
 
 	Matrix<T> operator-(const Matrix<T>& m) const {
+		if ((this->width_ != m.getWidth()) || (this->height_ != m.getHeight())) {
+			std::string msg_ = "The left-hand matrix must have same dimensions as the right-hand matrix.";
+			WrongMatrixDimensionException ex_(msg_);
+			throw ex_;
+		}
+		
 		Matrix<T> newMatrix_(this->height_, this->width_);
 		for (size_type i = 0; i < this->height_; ++i) {
 			for (size_type j = 0; j < this->width_; ++j) {
