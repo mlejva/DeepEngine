@@ -5,10 +5,9 @@
 
 Minor:
 - ❌ matrix pretty print
-- ❌ zmenit raw pointery na smart pointery
-- ❗ vyresit warningy od Clangu
-    - potlaceno prepinacem "-w" - tj. vypnute warningy
-- ❌ pridat const metody pro Matrix.h
+- ✅ zmenit raw pointery na smart pointery
+- ✅ vyresit warningy od Clangu
+- ✅ pridat const metody pro Matrix.h
 - ❌ auto& vs auto&&
 - ❌ T& vs T&&
 - ❗ metoda RandomInitialization() uvnitr Matrix.h je definovana pouze pro float typy
