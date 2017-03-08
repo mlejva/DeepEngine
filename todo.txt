@@ -4,6 +4,7 @@
 
 
 Minor:
+- ❌ matrix pretty print
 - ❌ zmenit raw pointery na smart pointery
 - ❗ vyresit warningy od Clangu
     - potlaceno prepinacem "-w" - tj. vypnute warningy
@@ -14,8 +15,23 @@ Minor:
     - kdyz se zavola s jinym typem, tak se provede implicitni konverze
 
 Main:
-- ❌ vector trida jako potomek Matrix
+- ✅ vector trida jako potomek Matrix
+- ❌ graph class
+    - sablonove?  
+    - train()
+    - test()
+- ❌ layer interface
+    - layer input
+    - layer output
+    - layer function
+    - weights
+    - activations
 - ❌ jednotlive vrstvy
+    - uvnitr graph class
+    - stejny typ jako graf
+- ❌ activation funkce interface
+- ❌ konkretni aktivacni funkce
+- ❌ derivace layer funkci
 - ❌ postavit computational graf
 - ❌ forward vypocet v grafu
 - ❌ backprop vypocet v grafu
