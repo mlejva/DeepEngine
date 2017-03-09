@@ -2,46 +2,17 @@
 
 #include <stack>
 #include "Matrix.h"
-#include "ActivationFunctionInterface.h"
-#include "ReluActivationFunction.h"
-#include "SigmoidActivationFunction.h"
-#include "TanhActivationFunction.h"
+#include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
+#include "Functions/ActivationFunctions/ReluActivationFunction.h"
+#include "Functions/ActivationFunctions/SigmoidActivationFunction.h"
+#include "Functions/ActivationFunctions/TanhActivationFunction.h"
+#include "Layers/LayerInterface.h"
 
 template <typename T>
 class Graph {
 
 private:
-    class LayerInterface {
-    friend class Graph;
-    protected:
-        Matrix<T> bias_;
-        Matrix<T> weights_;
-        
-
-    public:
-        virtual void InitializeWeights() = 0;
-        virtual void SetBiasMatrix(Matrix<T> biasMatrix) = 0;
-    };
-
-public:
-    /*class FullyConnectedLayer : public LayerInterface {
-
-    };
-
-    class ReluLayer : public LayerInterface {
-
-    };    
-
-    class SigmoidLayer : public LayerInterface {
-
-    };    
-
-    class TanhLayer : public LayerInterface {
-        
-    };*/
-
-private:
-    std::stack<LayerInterface> layers_;
+    std::stack<LayerInterface<T>> layers_;
     Matrix<T> input_;
 
 public:
@@ -52,20 +23,12 @@ public:
         input_ = input;
     }
 
-    void AddLayer(LayerInterface l) {
-        // TODO: Access the element on the top of layers and connect newly added layer to the layer on the top
-        layers_.push(l);
+    template <typename LayerType>
+    LayerInterface<T>& AddLayer() {
+        // TODO: Access the element on the top of layers and connect newly added layer to the layer on the top        
     }
 
     void RemoveLayer() {
         layers_.pop();
-    }
-
-    void Train() {
-
-    }
-    
-    void Test() {
-
     }
 };

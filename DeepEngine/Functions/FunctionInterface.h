@@ -4,13 +4,7 @@ template <typename T>
 class FunctionInterface
 {
 public:
-
-	FunctionInterface()
-	{
-	}
-
-	virtual ~FunctionInterface()
-	{
-	}
+	FunctionInterface() { }
+	virtual ~FunctionInterface() { }
 };
 

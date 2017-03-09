@@ -10,7 +10,7 @@ Minor:
 - ✅ pridat const metody pro Matrix.h
 - ❌ auto& vs auto&&
 - ❌ T& vs T&&
-- ❗ metoda RandomInitialization() uvnitr Matrix.h je definovana pouze pro float typy
+- ❗ metoda RandomInitialization() uvnitr Matrix.h je definovana pouze pro double typy
     - kdyz se zavola s jinym typem, tak se provede implicitni konverze
 
 Main:

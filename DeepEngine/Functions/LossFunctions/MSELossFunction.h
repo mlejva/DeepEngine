@@ -1,6 +1,7 @@
 #pragma once
+
 #include "Matrix.h"
-#include "LossFunctionInterface.h"
+#include "Functions/LossFunctions/LossFunctionInterface.h"
 
 template <typename T>
 class MSELossFunction : public LossFunctionInterface<T>
