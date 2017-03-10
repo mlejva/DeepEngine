@@ -1,22 +1,20 @@
 #pragma once
+
 #include <cmath>
-#include "ActivationFunctionInterface.h"
+#include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
-template <typename T>
-class SigmoidActivationFunction : ActivationFunctionInterface<T>
-{
-public:
+namespace Functions {
+	template <typename T>
+	class SigmoidActivationFunction : public Functions::ActivationFunctionInterface<T> {
+	/* Constructors & Destructor */
+	public:
+		SigmoidActivationFunction() { }
+		~SigmoidActivationFunction() { }
 
-	SigmoidActivationFunction()
-	{
-	}
-
-	~SigmoidActivationFunction()
-	{
-	}
-
-	T apply(T& param) {
-		return 1 / (1 + exp(-param));
-	}
-};
-
+	/* Public Methods */
+	public:
+		T Apply(const T& param) {
+			return 1 / (1 + exp(-param));
+		}
+	};
+}

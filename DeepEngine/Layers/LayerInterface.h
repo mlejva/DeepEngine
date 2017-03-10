@@ -3,29 +3,36 @@
 #include "Matrix.h"
 #include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
-template <typename T>
-class LayerInterface {
+namespace Layers {
+    template <typename T>
+    class LayerInterface {
+    /* Constructors For Children */
+    protected:
+        LayerInterface() { }
+        LayerInterface(const Matrix<T>& input) : input_(input) {  }
 
-/* Children Properties */
-protected:
-    Matrix<T> input_;
-    ActivationFunctionInterface<T> activationFunction_;
+    /* Base & Children Properties */
+    protected:
+        Matrix<T> input_;
+        Matrix<T> output_;
+        std::unique_ptr<Functions::ActivationFunctionInterface<T>> activationFunction_;
+    
+    /* Base & Children Methods */
+    protected:
+        virtual void SetActivationFunction() = 0;
+        void ApplyActivationFunction() {
+            output_ = input_;
+            output_.ApplyFunctionElementWise(activationFunction_);
+        }
 
-/* Children Methods */
-protected:
-    virtual void ApplyActivationFunction() = 0;
+    /* Destructor */
+    public:
+        virtual ~LayerInterface() { }
 
-/* Constructors & Destructor */
-public:
-    LayerInterface() { }
-	virtual ~LayerInterface() { }
-
-/* Public Methods */
-public:
-    void SetInput(const Matrix<T>& input) {
-        input_ = input;
-    }
-
-public:
-    Matrix<T> output;
-};
+    /* Getters & Setters */
+    public:
+        void SetInput(const Matrix<T>& input) { input_ = input; }
+        const Matrix<T>& GetOutput() { ApplyActivationFunction(); return output_; }
+        const Matrix<T>& GetInput() { return input_; }
+    };
+}

@@ -1,22 +1,19 @@
 #pragma once
-#include <algorithm>
-#include "ActivationFunctionInterface.h"
 
-template <typename T>
-class ReluActivationFunction : public ActivationFunctionInterface<T>
-{
-public:
+#include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
-	ReluActivationFunction()
-	{
-	}
+namespace Functions {
+	template <typename T>
+	class ReluActivationFunction : public Functions::ActivationFunctionInterface<T> {
+	/* Constructors & Destructor */
+	public:
+		ReluActivationFunction() { }
+		~ReluActivationFunction() { }
 
-	~ReluActivationFunction()
-	{
-	}
-
-	T apply(T& param) {
-		return std::max<T>(0, param);
-	}
-};
-
+	/* Public Methods */
+	public:
+		T Apply(const T& param) {
+			return std::max<T>(0, param);
+		}
+	};
+}

@@ -1,5 +1,6 @@
 ❌ - nevyreseno
 ❗ - docasne reseni (warning)
+🚧 - in progress
 ✅ - vyreseno
 
 
@@ -13,23 +14,25 @@ Minor:
 - ❗ metoda RandomInitialization() uvnitr Matrix.h je definovana pouze pro double typy
     - kdyz se zavola s jinym typem, tak se provede implicitni konverze
 
-Main:
+Major:
+- ✅ pridat namespace pro funkce
 - ✅ vector trida jako potomek Matrix
-- ❌ graph class
-    - sablonove?  
-    - train()
-    - test()
-- ❌ layer interface
-    - layer input
-    - layer output
-    - layer function
-    - weights
-    - activations
-- ❌ jednotlive vrstvy
-    - uvnitr graph class
-    - stejny typ jako graf
-- ❌ activation funkce interface
-- ❌ konkretni aktivacni funkce
+- 🚧 graph class
+    - ✅ sablonove?  
+    - ❌ train()
+    - ❌ test()
+- 🚧 layer interface
+    - ✅ layer input
+    - ✅ layer output
+    - ✅ activation function
+    - ❌ weights
+    - ❌ bias
+    - ✅ activations
+- ✅ jednotlive vrstvy
+    - ✅ uvnitr graph class
+    - ✅ stejny typ jako graf
+- ✅ activation funkce interface
+- ✅ konkretni aktivacni funkce
 - ❌ derivace layer funkci
 - ❌ postavit computational graf
 - ❌ forward vypocet v grafu

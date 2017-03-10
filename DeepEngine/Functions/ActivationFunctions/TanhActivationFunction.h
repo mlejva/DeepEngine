@@ -1,22 +1,20 @@
 #pragma once
+
 #include <cmath>
-#include "ActivationFunctionInterface.h"
+#include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
-template <typename T>
-class TanhActivationFunction : public ActivationFunctionInterface<T>
-{
-public:
+namespace Functions {
+	template <typename T>
+	class TanhActivationFunction : public Functions::ActivationFunctionInterface<T> {
+	/* Constructors & Destructor */
+	public:
+		TanhActivationFunction() { }
+		~TanhActivationFunction() { }
 
-	TanhActivationFunction()
-	{
-	}
-
-	~TanhActivationFunction()
-	{
-	}
-
-	T apply(T& param) {
-		return tanh(param);
-	}
-};
-
+	/* Public Methods */
+	public:
+		T Apply(const T& param) {
+			return tanh(param);
+		}
+	};
+}

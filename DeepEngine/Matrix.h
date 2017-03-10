@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <exception>
-#include "Functions/FunctionInterface.h"
+#include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
 class WrongMatrixDimensionException : public std::runtime_error {
 public:
@@ -19,6 +19,21 @@ public:
 
 template <typename T>
 class Matrix {
+/* Private Properties */
+private:
+	std::size_t rowsCount_;
+	std::size_t colsCount_;
+	std::vector<T> data_;
+
+/* Private Methods */
+private: 
+	void ResizeMatrix_(std::size_t rows, std::size_t cols) { 
+		rowsCount_ = rows;
+		colsCount_ = cols;
+
+		data_ = std::vector<T>(rowsCount_ * colsCount_); 
+	}
+
 /* Constructors & Destructor */
 public:
 	Matrix() { ResizeMatrix_(0, 0); }
@@ -46,13 +61,21 @@ public:
 	}
 
 	const Matrix<T>& operator= (const Matrix<T>& m) {
+		ResizeMatrix_(m.rowsCount_, m.colsCount_);
+		this->data_ = m.data_;		
+
+		return *this;
+		/*
 		if (this->rowsCount_ == m.rowsCount_ && this->colsCount_ == m.colsCount_) {
-			this->data_ = std::vector<int>(m.data_);
+			this->data_ = m.data_;
+			this->rowsCount_ = m.rowsCount_;
+			this->colsCount_ = m.colsCount_;
 			return *this;
 		}
 		else {
 			throw WrongMatrixDimensionException("Both matrices must have same dimensions.");
 		}
+		*/
 	}		
 
 	friend std::ostream& operator<<(std::ostream& s, const Matrix<T>& m) {
@@ -230,12 +253,10 @@ public:
 	const std::size_t& GetColsCount() const { return colsCount_; }
 
 /* Public Methods */
-public:
-	template <typename FuncType>
-	void ApplyFunctionElementWise() { 
-		std::for_each(this->begin(), this->end(), [](T& el_) {
-			FuncType func_;
-			el_ = func_.apply(el_);
+public:	
+	void ApplyFunctionElementWise(const std::unique_ptr<Functions::ActivationFunctionInterface<T> >& func) { 
+		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
+			el_ = func->Apply(el_);
 		});
 	}
 
@@ -255,15 +276,4 @@ public:
 		});
 	}	
 
-private:
-	std::size_t rowsCount_;
-	std::size_t colsCount_;
-	std::vector<T> data_;
-
-	void ResizeMatrix_(std::size_t rows, std::size_t cols) { 
-		rowsCount_ = rows;
-		colsCount_ = cols;
-
-		data_ = std::vector<T>(rowsCount_ * colsCount_); 
-	}
 };

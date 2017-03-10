@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Matrix.h"
-#include "Functions/FunctionInterface.h"
+namespace Functions {
+	template <typename T>
+	class ActivationFunctionInterface {
+	/* Constructor & Destructor */
+	public:
+		ActivationFunctionInterface() { }
+		virtual ~ActivationFunctionInterface() { }
 
-template <typename T>
-class ActivationFunctionInterface : public FunctionInterface<T>
-{
-public:
-	ActivationFunctionInterface() { }
-	virtual ~ActivationFunctionInterface() { }
-
-	virtual T apply(T& param) = 0;
-};
-
+	/* Public Methods */
+	public:
+		virtual T Apply(const T& param) = 0;
+	};
+}

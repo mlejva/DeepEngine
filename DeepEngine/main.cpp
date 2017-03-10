@@ -4,27 +4,33 @@
 #include "Matrix.h"
 #include "Vector.h"
 #include "Graph.h"
+#include "Layers/ReluLayer.h"
+#include "Layers/SigmoidLayer.h"
 
 int main() {		
-	/*Matrix<float> input(3, 4);
+	Matrix<double> m1(4, 4);
+	m1.RandomInitialization();
 
-	Graph<float> g;
-	Graph<float>::TanhLayer tl;
-	tl.SetInput(input);
-	g.AddLayer(tl);
+	Graph<double> g(m1);
+	const auto& rl1 = g.AddLayer<Layers::ReluLayer<double>>();
+	const auto& rl2 = g.AddLayer<Layers::SigmoidLayer<double>>();
+	const auto& rl3 = g.AddLayer<Layers::SigmoidLayer<double>>();
+	const auto& rl4 = g.AddLayer<Layers::ReluLayer<double>>();
 	
+	//g.RemoveLayer(rl3);
+	const auto& graphOutput = g.Run();
+	//const auto& graphOutput2 = g.Run2();
 
-	Graph<float> g;
-	
-	TanhLayer *tl = g.AddLayer<TanhLayer>();
-	tl.SetInput(input);
-	
-	SigmoidLayer *sl = g.AddLayer<SigmoidLayer>();
-	sl.SetInput(tl.output);
+	/*
+	std::cout << "Run:" << std::endl;
+	std::cout << graphOutput << std::endl;
+	std::cout << "==========" << std::endl;
 
-	g.Run();*/
+	std::cout << "Run2:" << std::endl;
+	std::cout << graphOutput2 << std::endl;
+	std::cout << "==========" << std::endl;
+	*/
 
 	std::cout << "Done" << std::endl;
-
 	return 0;
 }
