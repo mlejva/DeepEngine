@@ -45,7 +45,7 @@ public:
 	~Matrix() { }
 
 /* Operators */
-public:
+public:			
 	T& operator() (const std::size_t& rowPos, const std::size_t& colPos) {			
 		if (rowPos > rowsCount_ || colPos > colsCount_)
 			throw InvalidIndexException("Index you are trying to access is not valid.");
@@ -61,7 +61,11 @@ public:
 	}
 
 	const Matrix<T>& operator= (const Matrix<T>& m) {
-		ResizeMatrix_(m.rowsCount_, m.colsCount_);
+		//ResizeMatrix_(m.rowsCount_, m.colsCount_);
+
+		if (this->rowsCount_ != m.rowsCount_ || this->colsCount_ != m.colsCount_)
+			throw WrongMatrixDimensionException("You are trying to assign to a matrix with different shape.");
+
 		this->data_ = m.data_;		
 
 		return *this;
@@ -160,9 +164,10 @@ public:
 		Matrix<T> newMatrix_(this->rowsCount_, m.colsCount_);
 		for (std::size_t row = 0; row < newMatrix_.rowsCount_; ++row) {
 			for (std::size_t column = 0; column < newMatrix_.colsCount_; ++column) {
-				T newValue_ = 0;
+				//T newValue_ = 0;
 				for (std::size_t inner = 0; inner < this->colsCount_; ++inner) {
-					newValue_ += (*this)(row, inner) * m(inner, column);
+					//newValue += (*this)(row, inner) * m(inner, column);
+					newMatrix_(row, column) += (*this)(row, inner) * m(inner, column);
 				}
 			}
 		}
@@ -176,9 +181,10 @@ public:
 		Matrix<T> newMatrix_(this->rowsCount_, m.colsCount_);
 		for (std::size_t row = 0; row < newMatrix_.rowsCount_; ++row) {
 			for (std::size_t column = 0; column < newMatrix_.colsCount_; ++column) {
-				T newValue_ = 0;
+				//T newValue_ = 0;
 				for (std::size_t inner = 0; inner < this->colsCount_; ++inner) {
-					newValue_ += (*this)(row, inner) * m(inner, column);
+					//newValue += (*this)(row, inner) * m(inner, column);
+					newMatrix_(row, column) += (*this)(row, inner) * m(inner, column);
 				}
 			}
 		}
@@ -254,6 +260,11 @@ public:
 
 /* Public Methods */
 public:	
+	void ReshapeWithMatrix(const Matrix<T>& m) {
+		ResizeMatrix_(m.rowsCount_, m.colsCount_);
+		this->data_ = m.data_;
+	}
+
 	void ApplyFunctionElementWise(const std::unique_ptr<Functions::ActivationFunctionInterface<T> >& func) { 
 		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
 			el_ = func->Apply(el_);
@@ -274,6 +285,52 @@ public:
 		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
 			el_ = distr_(gen_);
 		});
-	}	
+	}
+
+	void RandomInitialization(const std::size_t& rows, const std::size_t& cols) {
+		ResizeMatrix_(rows, cols);
+
+		std::random_device rd_; // Obtain a random number from hardware
+		// A Mersenne Twister pseudo-random generator of 32-bit numbers 
+		// with a state size of 19937 bits.
+		std::mt19937 gen_(rd_()); // Seed the generator
+		// Xavier initialization
+		T start_ = -(sqrt(6.0 / (this->rowsCount_ + this->colsCount_)));
+		T end_ = (sqrt(6.0 / (this->rowsCount_ + this->colsCount_)));
+		// TODO: Now works only normal distribution for real numbers
+		std::uniform_real_distribution<> distr_(start_, end_); // Define the range
+		
+		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
+			el_ = distr_(gen_);
+		});
+	}
+
+	void InitializeWithZeros() {
+		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el) {
+			el = 0;
+		});
+	}
+
+	void InitializeWithZeros(const std::size_t& rows, const std::size_t& cols) {
+		ResizeMatrix_(rows, cols);
+
+		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el) {
+			el = 0;
+		});
+	}
+
+	void InitializeWithOnes() {
+		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el) {
+			el = 1;
+		});
+	}
+
+	void InitializeWithOnes(const std::size_t& rows, const std::size_t& cols) {
+		ResizeMatrix_(rows, cols);
+
+		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el) {
+			el = 1;
+		});
+	}
 
 };

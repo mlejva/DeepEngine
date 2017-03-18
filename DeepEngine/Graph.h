@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include "Matrix.h"
-#include "Layers/IdentityLayer.h"
+#include "Layers/InputLayer.h"
 #include "Layers/ReluLayer.h"
 #include "Layers/LayerInterface.h"
 
@@ -19,7 +19,9 @@ private:
 /* Private Methods */
 private:
     void InitializeLayerStack() {
-        std::unique_ptr<Layers::LayerInterface<T>> inputLayer_(new Layers::IdentityLayer<T>(input_));
+        // Here number of layers' outputs is 'input_.GetRowsCount()' because we are using this layer as a "dummy" layer
+        // ---> 'layers_' can't be empty when user is calling 'AddLayer()'. That's why we create this dummy layer 
+        std::unique_ptr<Layers::LayerInterface<T>> inputLayer_(new Layers::InputLayer<T>(input_));
         layers_.push_back(std::move(inputLayer_));
     }
 
@@ -35,13 +37,15 @@ public:
     Graph() : input_(0, 0) { InitializeLayerStack(); }
     Graph(const Matrix<T>& input) : input_(input) { InitializeLayerStack(); }
     ~Graph() { }
+
 /* Public Methdos */
 public:
     template <typename LayerType>
-    const std::unique_ptr<Layers::LayerInterface<T>>& AddLayer() {        
+    const std::unique_ptr<Layers::LayerInterface<T>>& AddLayer(const std::size_t& outputSize) {        
         const auto& previousLayer_ = layers_.back();
         const auto& previousOutput_ = previousLayer_->GetOutput();
-        std::unique_ptr<Layers::LayerInterface<T>> newLayer_(new LayerType(previousOutput_));
+        
+        std::unique_ptr<Layers::LayerInterface<T>> newLayer_(new LayerType(previousOutput_, outputSize));        
 
         layers_.push_back(std::move(newLayer_));
 
@@ -82,30 +86,21 @@ public:
     }
 
     const Matrix<T>& Run() {
-        std::size_t i = 0;
         for (const auto& layer : layers_) {
-            
+            layer->Run();
+                                    
             std::cout << "Layer Type: " << typeid(*layer).name() << std::endl;
-            std::cout << "Input:" << std::endl;
+            std::cout << "Input: " << layer->GetLayerInputShape() << std::endl;
             std::cout << layer->GetInput() << std::endl;
-            
+
             std::cout << "--------" << std::endl;
 
-            std::cout << "Output:" << std::endl;
+            std::cout << "Output: " << layer->GetLayerOutputShape() << std::endl;
             std::cout << layer->GetOutput() << std::endl;
             std::cout << "========" << std::endl;
-            
-            //if (i == layers_.size() - 1) {
-             //   output_ = layer->GetOutput();
-            //}
-            ++i;            
         }
 
-        return output_;
-    }
-
-    const Matrix<T>& Run2() {
-        output_ = layers_.back()->GetOutput();
+        output_.ReshapeWithMatrix(layers_.back()->GetOutput());
         return output_;
     }
 };

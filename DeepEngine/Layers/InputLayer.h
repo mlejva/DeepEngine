@@ -1,27 +1,27 @@
 #pragma once
 
 #include "Layers/LayerInterface.h"
-#include "Functions/ActivationFunctions/SigmoidActivationFunction.h"
+#include "Functions/ActivationFunctions/IdentityActivationFunction.h"
 
 namespace Layers {
     template <typename T>
-    class SigmoidLayer : public Layers::LayerInterface<T> {
+    class InputLayer : public Layers::LayerInterface<T> {
     private:
         typedef Layers::LayerInterface<T> base;
     
     /* Constructors & Destructor */
     public:
-        SigmoidLayer() : base() { 
+        InputLayer() : base(true) { 
             SetActivationFunction_(); 
         }
-        SigmoidLayer(const Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
+        InputLayer(const Matrix<T>& input) : base(input, 0, true) { 
             SetActivationFunction_(); 
         }
-
+    
     /* Overrides */      
     private:
         virtual void SetActivationFunction_() {
-            base::activationFunction_ = std::make_unique<Functions::SigmoidActivationFunction<T>>();
+            base::activationFunction_ = std::make_unique<Functions::IdentityActivationFunction<T>>();
         }        
-    };    
+    };
 }

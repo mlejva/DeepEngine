@@ -11,30 +11,46 @@ Minor:
 - ✅ pridat const metody pro Matrix.h
 - ❌ auto& vs auto&&
 - ❌ T& vs T&&
+- ❌ CustomLayer
+- ❌ Bezparametricke konstruktory layeru?
+- ❌ Overridnout operator "<<" o Graph tridy - vypise strukturu grafu
 - ❗ metoda RandomInitialization() uvnitr Matrix.h je definovana pouze pro double typy
     - kdyz se zavola s jinym typem, tak se provede implicitni konverze
 
 Major:
+- ❌❌❌ Podpora pro vice nez 2D matice ---> implementace tensoru ---> predelani vsech layeru + layer interface + vsech funkci
+                                                |
+                                                |
+                                                |---> templaty s promennym poctem parametru
+- ❌❌ Dummy input layer (ten, co je tam implicitne vzdy) provede operaci: "input * weights + b". Coz by asi prave tento input dummy layer delat nemel
+    - Nejspis by mel proste jen zkopirovat vstup a nic jineho. Tohle pusobi tak, ze o tom user nevi
+    - Navrh reseni: trida "DummyInputLayer" jako potomek "IdentityLayer"?
+- ❌ move constructors
+- ❌ move assignment operators
 - ✅ pridat namespace pro funkce
 - ✅ vector trida jako potomek Matrix
 - 🚧 graph class
     - ✅ sablonove?  
+    - ❌ expected output
+    - ❌ implement loss function in graph
     - ❌ train()
     - ❌ test()
+    - ❌ forward vypocet v grafu
+    - ❌ backprop vypocet v grafu
+    - ❌ gradient descent
 - 🚧 layer interface
     - ✅ layer input
     - ✅ layer output
     - ✅ activation function
-    - ❌ weights
+    - ✅ weights
     - ❌ bias
+    - ✅ output size
     - ✅ activations
 - ✅ jednotlive vrstvy
     - ✅ uvnitr graph class
     - ✅ stejny typ jako graf
-- ✅ activation funkce interface
-- ✅ konkretni aktivacni funkce
-- ❌ derivace layer funkci
-- ❌ postavit computational graf
-- ❌ forward vypocet v grafu
-- ❌ backprop vypocet v grafu
-- ❌ gradient descent
+- 🚧 activation funkce interface
+    - ✅ interface
+    - ✅ konkretni aktivacni funkce
+    - ❌ derivace aktivacnich funkci
+(- ❌ postavit computational graf)

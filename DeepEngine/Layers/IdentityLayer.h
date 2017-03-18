@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory>
-#include <iostream>
 #include "Layers/LayerInterface.h"
 #include "Functions/ActivationFunctions/IdentityActivationFunction.h"
 
@@ -13,16 +11,16 @@ namespace Layers {
     
     /* Constructors & Destructor */
     public:
-        IdentityLayer() { 
-            SetActivationFunction(); 
+        IdentityLayer() : base() { 
+            SetActivationFunction_(); 
         }
-        IdentityLayer(const Matrix<T>& input) : Layers::LayerInterface<T>(input) { 
-            SetActivationFunction(); 
+        IdentityLayer(const Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
+            SetActivationFunction_(); 
         }
 
     /* Overrides */      
     private:
-        virtual void SetActivationFunction() {
+        virtual void SetActivationFunction_() {
             base::activationFunction_ = std::make_unique<Functions::IdentityActivationFunction<T>>();
         }        
     };

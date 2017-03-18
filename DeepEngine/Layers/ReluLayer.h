@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include "Layers/LayerInterface.h"
 #include "Functions/ActivationFunctions/ReluActivationFunction.h"
 
@@ -12,12 +11,16 @@ namespace Layers {
     
     /* Constructors & Destructor */
     public:
-        ReluLayer() { SetActivationFunction(); }
-        ReluLayer(const Matrix<T>& input) : Layers::LayerInterface<T>(input) { SetActivationFunction(); }
+        ReluLayer() : base() { 
+            SetActivationFunction_(); 
+        }
+        ReluLayer(const Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
+            SetActivationFunction_(); 
+        }
 
     /* Overrides */      
     private:
-        virtual void SetActivationFunction() {
+        virtual void SetActivationFunction_() {
             base::activationFunction_ = std::make_unique<Functions::ReluActivationFunction<T>>();
         }
     };
