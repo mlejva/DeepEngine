@@ -1,6 +1,8 @@
 #pragma once
 
-#include <sstream> // TODO: DELETE
+// TODO: DELETE
+#include <sstream> 
+#include <iostream>
 
 #include "Matrix.h"
 #include "Vector.h"
@@ -12,25 +14,28 @@ namespace Layers {
 
     /* Private Methods */
     private:
-        void SetLayer_(const Matrix<T>& input, const std::size_t& outputSize) {
+        void SetLayer_(const std::size_t& outputSize) {
             if (isInputLayer_) {
                 output_.InitializeWithZeros(input_.GetRowsCount(), input_.GetColsCount());
             }
             else {
                 output_.InitializeWithZeros(input_.GetRowsCount(), outputSize);
                 weights_.RandomInitialization(input_.GetColsCount(), outputSize);
+                std::cout << "Weights: " << std::endl;
+                std::cout << weights_ << std::endl;
+
                 bias_.InitializeWithZeros(outputSize);
             }    
         }
 
-    /* Constructors For Children */
+    /* Constructors */
     protected:
         LayerInterface(const bool& isInputLayer = false) : input_(0, 0), weights_(0, 0), bias_(0), output_(0, 0), isInputLayer_(isInputLayer) { }
         LayerInterface(const Matrix<T>& input, const std::size_t& outputSize, const bool& isInputLayer = false) : 
             input_(input), 
             isInputLayer_(isInputLayer) {
 
-            SetLayer_(input_, outputSize);
+            SetLayer_(outputSize);
         }
 
     /* Base & Children Properties */
@@ -52,8 +57,7 @@ namespace Layers {
                 output_ = input_;
             }
             else {
-                Matrix<T> tmp = input_ * weights_;
-                output_ = tmp;// + bias_; // z_n
+                output_ = input_ * weights_;// + bias_; // z_n
             }
             output_.ApplyFunctionElementWise(activationFunction_); // a_n
         }
@@ -64,15 +68,18 @@ namespace Layers {
 
     /* Getters & Setters */
     public:        
-        void Run() { 
+        const Matrix<T>& GetOutput() { return output_; }
+        const Matrix<T>& GetInput() { return input_; }
+        //void SetInput(const Matrix<T>& input) { input_.ResizeWithMatrix(input); } 
+    
+    /* Public Methods */
+    public:
+        void Forward() { 
             ApplyActivationFunction_(); 
         }
         void Initialize(const Matrix<T>& input, const std::size_t& outputSize) {
             SetLayer_(input, outputSize);
         }
-        const Matrix<T>& GetOutput() { return output_; }
-        const Matrix<T>& GetInput() { return input_; }
-
         // TODO: DELETE BOTH WHEN DONE
         const std::string GetLayerInputShape() {
             std::stringstream ss;

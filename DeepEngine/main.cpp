@@ -8,34 +8,28 @@
 #include "Graph.h"
 #include "Layers/ReluLayer.h"
 #include "Layers/SigmoidLayer.h"
+#include "Layers/IdentityLayer.h"
+#include "Functions/LossFunctions/MSELossFunction.h"
+
+typedef Functions::MSELossFunction<double> MSEDouble;
 
 int main() {		
 	// A row represents one input vector of length threeą
 	Matrix<double> m1(1, 3); // 1x3
-
 	m1.RandomInitialization();
-	//m1.InitializeWithOnes();
-	
-	Graph<double> g(m1); // TODO: Pri inicializaci by se mel jeste predavat expected ouput, jako druhy parametr
-	
-	// Input layer is 1x3
-	const auto& rl1 = g.AddLayer<Layers::SigmoidLayer<double>>(3); // 1x3
-	const auto& rl2 = g.AddLayer<Layers::SigmoidLayer<double>>(4); // 1x4
-	
-	//g.RemoveLayer(rl3);
-	const auto& graphOutput = g.Run();
-	//const auto& graphOutput2 = g.Run2();
 
+	Matrix<double> expected(1, 1);
+	expected.RandomInitialization();
+
+	std::cout << "Expected: " << expected << std::endl;
 	
+	Graph<double, MSEDouble> g(m1, expected);
+	g.AddLayer<Layers::IdentityLayer<double>>(1); // 1x1
+	const auto& graphOutput = g.Run(); // 1x1
+
 	std::cout << "Run:" << std::endl;
 	std::cout << graphOutput << std::endl;
 	std::cout << "==========" << std::endl;
-	
-
-	//std::cout << "Run:" << std::endl;
-	//std::cout << graphOutput << std::endl;
-	//std::cout << "==========" << std::endl;
-	
 
 	std::cout << "Done" << std::endl;
 	return 0;

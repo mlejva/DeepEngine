@@ -44,8 +44,16 @@ public:
 
 	~Matrix() { }
 
-/* Operators */
-public:			
+/* General Operators */
+public:
+	bool operator==(const Matrix<T>& m) const {
+		return (this->rowsCount_ == m.rowsCount_ && this->colsCount_ == m.colsCount_);
+	}
+
+	bool operator!=(const Matrix<T>& m) const {
+		return !(*this == m);
+	}
+
 	T& operator() (const std::size_t& rowPos, const std::size_t& colPos) {			
 		if (rowPos > rowsCount_ || colPos > colsCount_)
 			throw InvalidIndexException("Index you are trying to access is not valid.");
@@ -63,7 +71,8 @@ public:
 	const Matrix<T>& operator= (const Matrix<T>& m) {
 		//ResizeMatrix_(m.rowsCount_, m.colsCount_);
 
-		if (this->rowsCount_ != m.rowsCount_ || this->colsCount_ != m.colsCount_)
+		//if (this->rowsCount_ != m.rowsCount_ || this->colsCount_ != m.colsCount_)
+		if (*this != m)
 			throw WrongMatrixDimensionException("You are trying to assign to a matrix with different shape.");
 
 		this->data_ = m.data_;		

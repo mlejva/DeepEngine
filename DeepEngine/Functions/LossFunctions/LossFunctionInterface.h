@@ -4,8 +4,7 @@
 
 namespace Functions {
 	template <typename T>
-	class LossFunctionInterface
-	{
+	class LossFunctionInterface {	
 	/* Constructors & Destructor */
 	public:
 		LossFunctionInterface() { }

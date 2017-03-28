@@ -3,7 +3,6 @@
 🚧 - in progress
 ✅ - vyreseno
 
-
 Minor:
 - ❌ matrix pretty print
 - ✅ zmenit raw pointery na smart pointery
@@ -13,7 +12,7 @@ Minor:
 - ❌ T& vs T&&
 - ❌ CustomLayer
 - ❌ Bezparametricke konstruktory layeru?
-- ❌ Overridnout operator "<<" o Graph tridy - vypise strukturu grafu
+- ❌ Overridnout operator "<<" u tridy Graph -> vypise strukturu grafu
 - ❗ metoda RandomInitialization() uvnitr Matrix.h je definovana pouze pro double typy
     - kdyz se zavola s jinym typem, tak se provede implicitni konverze
 
@@ -31,13 +30,14 @@ Major:
 - ✅ vector trida jako potomek Matrix
 - 🚧 graph class
     - ✅ sablonove?  
-    - ❌ expected output
-    - ❌ implement loss function in graph
+    - ✅ expected output
+    - ✅ loss function
     - ❌ train()
     - ❌ test()
-    - ❌ forward vypocet v grafu
-    - ❌ backprop vypocet v grafu
-    - ❌ gradient descent
+    - ✅ forward vypocet v grafu
+    - 🚧 backprop vypocet v grafu
+        - 🚧 gradient descent
+        - ❌ stochastic gradient descent
 - 🚧 layer interface
     - ✅ layer input
     - ✅ layer output
@@ -52,5 +52,5 @@ Major:
 - 🚧 activation funkce interface
     - ✅ interface
     - ✅ konkretni aktivacni funkce
-    - ❌ derivace aktivacnich funkci
+    - 🚧 derivace aktivacnich funkci
 (- ❌ postavit computational graf)
