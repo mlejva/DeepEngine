@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 #include <typeinfo>
@@ -15,17 +16,20 @@ typedef Functions::MSELossFunction<double> MSEDouble;
 
 int main() {		
 	// A row represents one input vector of length threeą
-	Matrix<double> m1(1, 3); // 1x3
-	m1.RandomInitialization();
+	Matrix<double> input(1, 2); // 1x2
+	input(0, 0) = 0.05;
+	input(0, 1) = 0.10;
+	std::cout << "Network Input:\n" << input << "\n=======" << std::endl;
 
-	Matrix<double> expected(1, 1);
-	expected.RandomInitialization();
-
-	std::cout << "Expected: " << expected << std::endl;
+	Matrix<double> expected(1, 2);
+	expected(0, 0) = 0.01;
+	expected(0, 1) = 0.99;
+	std::cout << "Network Expected:\n" << expected << "\n=======" << std::endl;
 	
-	Graph<double, MSEDouble> g(m1, expected);
-	g.AddLayer<Layers::IdentityLayer<double>>(1); // 1x1
-	const auto& graphOutput = g.Run(); // 1x1
+	Graph<double, MSEDouble> g(input, expected);
+	g.AddLayer<Layers::SigmoidLayer<double>>(2); // 1x2
+	g.AddLayer<Layers::SigmoidLayer<double>>(2); // 1x2
+	const auto& graphOutput = g.Run(); // 1x2
 
 	std::cout << "Run:" << std::endl;
 	std::cout << graphOutput << std::endl;

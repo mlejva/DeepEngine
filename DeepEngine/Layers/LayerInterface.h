@@ -4,8 +4,8 @@
 #include <sstream> 
 #include <iostream>
 
+#include <algorithm>
 #include "Matrix.h"
-#include "Vector.h"
 #include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
 namespace Layers {    
@@ -14,17 +14,17 @@ namespace Layers {
 
     /* Private Methods */
     private:
-        void SetLayer_(const std::size_t& outputSize) {
+        void SetLayer_(const std::size_t& outputSize) {            
             if (isInputLayer_) {
                 output_.InitializeWithZeros(input_.GetRowsCount(), input_.GetColsCount());
             }
             else {
                 output_.InitializeWithZeros(input_.GetRowsCount(), outputSize);
-                weights_.RandomInitialization(input_.GetColsCount(), outputSize);
+                weights_.RandomInitialization(input_.GetColsCount(), outputSize);                
                 std::cout << "Weights: " << std::endl;
                 std::cout << weights_ << std::endl;
 
-                bias_.InitializeWithZeros(outputSize);
+                bias_.InitializeWithZeros(outputSize, 0);
             }    
         }
 
@@ -43,7 +43,9 @@ namespace Layers {
         const Matrix<T>& input_;
         Matrix<T> output_;
         Matrix<T> weights_;
-        Vector<T> bias_;
+        Matrix<T> bias_;                
+
+        Matrix<T> zValue_;
 
         std::unique_ptr<Functions::ActivationFunctionInterface<T>> activationFunction_;
 
@@ -54,12 +56,18 @@ namespace Layers {
         virtual void SetActivationFunction_() = 0;
         void ApplyActivationFunction_() {       
             if (isInputLayer_) {
-                output_ = input_;
+                zValue_.ReshapeWithMatrix(input_);
+                //output_ = input_;
             }
             else {
-                output_ = input_ * weights_;// + bias_; // z_n
-            }
-            output_.ApplyFunctionElementWise(activationFunction_); // a_n
+                zValue_.ReshapeWithMatrix(input_ * weights_);// + bias_; // z_n
+                //output_ = input_ * weights_;// + bias_; // z_n
+            }            
+
+            output_ = zValue_;
+            std::for_each(output_.GetDataBegin(), output_.GetDataEnd(), [&](T& el_) {
+                el_ = activationFunction_->Apply(el_);
+            });
         }
 
     /* Destructor */
@@ -72,6 +80,7 @@ namespace Layers {
         const Matrix<T>& GetInput() { return input_; }
         //void SetInput(const Matrix<T>& input) { input_.ResizeWithMatrix(input); } 
     
+        const Matrix<T>& GetWeights() { return weights_; }
     /* Public Methods */
     public:
         void Forward() { 
@@ -80,6 +89,15 @@ namespace Layers {
         void Initialize(const Matrix<T>& input, const std::size_t& outputSize) {
             SetLayer_(input, outputSize);
         }
+        
+        const Matrix<T> ComputeLayerError(const Matrix<T>& previousLayerError) {                   
+            // Compute derivative of activation function with zValue_                            
+            const auto& actDerivative_ = activationFunction_->Derivative(zValue_);            
+
+            Matrix<T> layerError_ = Matrix<T>::multiply(previousLayerError, actDerivative_);            
+            return layerError_;
+        }
+        
         // TODO: DELETE BOTH WHEN DONE
         const std::string GetLayerInputShape() {
             std::stringstream ss;

@@ -13,5 +13,6 @@ namespace Functions {
 	/* Public Methods */
 	public:
 		virtual T Apply(const Matrix<T>& predicted, const Matrix<T>& expected) = 0;
+		virtual Matrix<T> ComputeGradient(const Matrix<T>& predicted, const Matrix<T>& expected) = 0;
 	};
 }

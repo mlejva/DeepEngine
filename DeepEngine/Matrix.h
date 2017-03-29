@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <exception>
-#include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
 class WrongMatrixDimensionException : public std::runtime_error {
 public:
@@ -19,6 +18,31 @@ public:
 
 template <typename T>
 class Matrix {
+/* Public Static Methods */
+public:
+	/*// Computes a multiplication between two matrices
+	static Matrix<T> dot(const Matrix<T>& left, const Matrix<T>& right) {
+
+	}*/
+	
+	// Computes a Hadamard product of two matrices
+	static Matrix<T> multiply(const Matrix<T>& left, const Matrix<T>& right) {
+		if (left != right)
+			throw WrongMatrixDimensionException("Both matrices must have the same shape.");
+		
+		const auto& rowsTotal_ = left.GetRowsCount();
+		const auto& colsTotal_ = left.GetColsCount();
+
+		Matrix<T> newMatrix_(rowsTotal_, colsTotal_);
+		for (std::size_t row = 0; row < rowsTotal_; ++row) {
+			for (std::size_t column = 0; column < colsTotal_; ++column) {
+				newMatrix_(row, column) = left(row, column) * right(row, column);
+			}
+		}
+		return newMatrix_;
+	}
+
+
 /* Private Properties */
 private:
 	std::size_t rowsCount_;
@@ -40,7 +64,7 @@ public:
 	Matrix(const std::size_t& rows, const std::size_t& cols) { ResizeMatrix_(rows, cols); }
 	Matrix(const Matrix<T>& m) : 
 		rowsCount_(m.rowsCount_), 
-		colsCount_(m.colsCount_) { data_ = std::vector<T>(m.data_); }		
+		colsCount_(m.colsCount_) { data_ = m.data_; }		
 
 	~Matrix() { }
 
@@ -72,10 +96,12 @@ public:
 		//ResizeMatrix_(m.rowsCount_, m.colsCount_);
 
 		//if (this->rowsCount_ != m.rowsCount_ || this->colsCount_ != m.colsCount_)
-		if (*this != m)
+		/*if (*this != m)
 			throw WrongMatrixDimensionException("You are trying to assign to a matrix with different shape.");
-
-		this->data_ = m.data_;		
+		*/
+		rowsCount_ = m.rowsCount_;
+		colsCount_ = m.colsCount_;
+		data_ = m.data_;				
 
 		return *this;
 		/*
@@ -266,19 +292,19 @@ public:
 public:
 	const std::size_t& GetRowsCount() const { return rowsCount_; }
 	const std::size_t& GetColsCount() const { return colsCount_; }
+	
+	typename std::vector<T>::const_iterator GetDataCBegin() const { return data_.cbegin(); }
+	typename std::vector<T>::const_iterator GetDataCEnd() const { return data_.cend(); }
+
+	typename std::vector<T>::iterator GetDataBegin() { return data_.begin(); }
+	typename std::vector<T>::iterator GetDataEnd() { return data_.end(); }
 
 /* Public Methods */
 public:	
 	void ReshapeWithMatrix(const Matrix<T>& m) {
 		ResizeMatrix_(m.rowsCount_, m.colsCount_);
 		this->data_ = m.data_;
-	}
-
-	void ApplyFunctionElementWise(const std::unique_ptr<Functions::ActivationFunctionInterface<T> >& func) { 
-		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
-			el_ = func->Apply(el_);
-		});
-	}
+	}		
 
 	void RandomInitialization() {
 		std::random_device rd_; // Obtain a random number from hardware

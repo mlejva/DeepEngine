@@ -15,5 +15,9 @@ namespace Functions {
         T Apply(const T& param) {
             return param;
         }
+
+        Matrix<T> Derivative(Matrix<T>& param) {
+            return param;
+        }        
     };
 }

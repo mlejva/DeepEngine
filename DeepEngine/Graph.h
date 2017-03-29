@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <array>
 #include <algorithm>
 #include <iostream>
 #include "Matrix.h"
@@ -44,8 +45,75 @@ private:
             std::cout << layer->GetOutput() << std::endl;
             std::cout << "========" << std::endl;
         }
+    }
+
+    void Backward_() {        
+        // 1) Get the output error:
+        // i.e. error of the last layer
+        // layer_errors is a dictionary of int:Matrix<T>
+        // layer_errors[last_layer_index] = dLoss/dLast_Layer_Output * last_layer_act_func_derivative(output_before_activationFunction)
+        // dLoss/dLast_Layer_Output is a vector (= loss gradient with respect to the activations of last layer)
+        // multiplication is the hadamard product
+        
+        const auto& lastLayer_ = layers_.back();
+        // Loss gradient with respect to the network predicted values
+        const auto& lossGradient_ = lossFunction_->ComputeGradient(lastLayer_->GetOutput(), expectedOutput_);
+        const Matrix<T>& outputError_ = lastLayer_->ComputeLayerError(lossGradient_);
+        
+        const std::vector<Matrix<T>> layerErrors_ = BackpropagateError_(outputError_);
+
+        // Gradient Descent
+
+        /*
+        // Returns the gradient matrix of loss with respect to the output of the last layer (= predicted)
+        auto& lossGradient_ = lossFunction_–>ComputeGradient(lastLayer_->GetOutput(), expectedOutput_);
+        // Returns the matrix of derivation_activ_function(output_before_activationFunction_j) for each j in that layer
+        auto& activDer_ = lastLayer_->ComputeDerivative();
+        auto& lastLayerError_ = lossGradient_.HadamardProduct(activDer_);
+        layerErrors_[layersTotal_ - 1] = lastLayerError_;        
+        */
+        // 2) Backpropagate the error:
+        // for i=layers_total - 2 to 0: // -2 because an error of the last layer is already computed
+        //    // multiplication is the hadamard product
+        //    layer_error = weights_of_layer_i+1 * layer_errors[i+1] * current_layer_act_func_derivative(current_layer_z_values) 
+        //    layer_errors[i] = layer_error
+
+        // 3) Update weights and biases
     } 
     
+    const std::vector<Matrix<T>> BackpropagateError_(const Matrix<T>& outputError) {
+        const auto& layersTotal_ = layers_.size();
+        std::vector<Matrix<T>> layerErrors_(layersTotal_);
+        layerErrors_.at(layersTotal_ - 1) = outputError;        
+
+        // - 2 because output layer is already computed
+        // on the 0 index is a dummy input layer
+        for (auto layerIndex = layersTotal_ - 2; layerIndex > 0; layerIndex--) {
+            std::cout << "layer: " << std::to_string(layerIndex) << std::endl;
+            const auto& previousLayer_ = layers_.at(layerIndex + 1);
+            const auto& currentLayer_ = layers_.at(layerIndex);
+
+            const auto& previousWeights_ = previousLayer_->GetWeights();            
+            std::cout << "previous weights of layer: " << std::to_string(layerIndex + 1) << std::endl;
+            std::cout << previousWeights_ << std::endl;
+            std::cout << "----end----" << std::endl;
+
+            const auto& previousLayerError_ = layerErrors_.at(layerIndex + 1);
+            std::cout << "previous error of layer: " << std::to_string(layerIndex + 1) << std::endl;
+            std::cout << previousLayerError_ << std::endl;
+            std::cout << "----end----" << std::endl;
+            const auto& movedError_ = previousLayerError_ * previousWeights_;
+
+            const auto& currentLayerError_ = currentLayer_->ComputeLayerError(movedError_);
+            std::cout << "error of current layer: " << std::to_string(layerIndex) << std::endl;
+            std::cout << currentLayerError_ << std::endl;
+            std::cout << "----end----" << std::endl;
+            layerErrors_[layerIndex] = currentLayerError_;
+        }
+
+        return layerErrors_;
+    }
+
     /*
     // Connects the output of the first layer to the input of the second layer
     void ConnectTwoLayers(const std::unique_ptr<Layers::LayerInterface<T>>& first, 
@@ -114,15 +182,21 @@ public:
     */
 
     const Matrix<T>& Run() {
-        // One forward run
-        // One backwards run
 
+        // TRAIN:
+        // Compute activations
         Forward_();
+        // Compute error of each layer
+        Backward_();
+        // TODO: Update weights
+        //SGD_();
 
         output_.ReshapeWithMatrix(layers_.back()->GetOutput());
         const auto& loss_ = lossFunction_->Apply(output_, expectedOutput_);
+        //const auto& derivative_ = lossFunction_->ComputeDerivative(output_, expectedOutput_);
 
         std::cout << "Loss: " << loss_ << std::endl;
+        //std::cout << "Loss derivative: " << derivative_ << std::endl;
         return output_;
     }
 
@@ -131,6 +205,6 @@ public:
     }
 
     void Evaluate() {
-        
+        // Only forward
     }
 };
