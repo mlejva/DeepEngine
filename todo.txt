@@ -24,6 +24,8 @@ Minor:
 - ❌ predelat Apply u aktivacnich funkci, aby braly jako parametr matici a ne skalar
 - ❌ smazat Vector tridu
 - ❌ udelat Input layer nedostupny z klient kodu
+- ❌ prejmenovat matrix dimension exception na matrix shape exception
+- ❌ ma AddLayer neco vracet? (spis ne)
 =========
 
 Major:
@@ -48,6 +50,8 @@ Major:
     - 🚧 backprop vypocet v grafu
         - 🚧 gradient descent
         - ❌ stochastic gradient descent
+    - ❌ konstruktor by nemel brat jako parametry input a expected output, to by mel brat az train
+    - ❌ train ma vratit dvojici (predictedValues_, loss_)
 - 🚧 Loss interface
     - ✅ loss funkce
     - ✅ gradient vuci predicted output
@@ -70,3 +74,5 @@ Major:
     - ✅ konkretni aktivacni funkce
     - 🚧 derivace aktivacnich funkci
 (- ❌ postavit computational graf)
+- ❌ previous layer vs. next layer (nazvoslovi v Graph class) 
+- ❌ exception u matrix class, kdyz nekdo chce instancovat matici, co ma pocet radku/sloupcu 0 (musi byt aspon 1)

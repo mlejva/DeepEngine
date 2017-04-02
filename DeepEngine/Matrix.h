@@ -42,7 +42,6 @@ public:
 		return newMatrix_;
 	}
 
-
 /* Private Properties */
 private:
 	std::size_t rowsCount_;
@@ -70,12 +69,54 @@ public:
 
 /* General Operators */
 public:
-	bool operator==(const Matrix<T>& m) const {
+	bool operator== (const Matrix<T>& m) const {
 		return (this->rowsCount_ == m.rowsCount_ && this->colsCount_ == m.colsCount_);
 	}
 
-	bool operator!=(const Matrix<T>& m) const {
+	bool operator!= (const Matrix<T>& m) const {
 		return !(*this == m);
+	}
+
+	Matrix<T>& operator+= (const Matrix<T>& m) {
+		if (*this != m)
+			throw WrongMatrixDimensionException("Both matrices must be of same shape.");
+
+		for (std::size_t row = 0; row < this->rowsCount_; ++row) {
+			for (std::size_t column = 0; column < this->colsCount_; ++column) {
+				(*this)(row, column) += m(row, column);
+			}
+		}
+		return *this;
+	}
+
+	Matrix<T>& operator-= (const Matrix<T>& m) {
+		if (*this != m)
+			throw WrongMatrixDimensionException("Both matrices must be of same shape.");
+
+		for (std::size_t row = 0; row < this->rowsCount_; ++row) {
+			for (std::size_t column = 0; column < this->colsCount_; ++column) {
+				(*this)(row, column) -= m(row, column);
+			}
+		}
+		return *this;
+	}
+
+	Matrix<T>& operator+= (const T& scalar) {		
+		for (std::size_t row = 0; row < this->rowsCount_; ++row) {
+			for (std::size_t column = 0; column < this->colsCount_; ++column) {
+				(*this)(row, column) += scalar;
+			}
+		}
+		return *this;
+	}
+
+	Matrix<T>& operator-= (const T& scalar) {					
+		for (std::size_t row = 0; row < this->rowsCount_; ++row) {
+			for (std::size_t column = 0; column < this->colsCount_; ++column) {
+				(*this)(row, column) -= scalar;
+			}
+		}
+		return *this;
 	}
 
 	T& operator() (const std::size_t& rowPos, const std::size_t& colPos) {			
@@ -143,7 +184,7 @@ public:
 			return newMatrix_;
 		}
 		else {
-			throw WrongMatrixDimensionException("Both matrices must have same dimensions.");
+			throw WrongMatrixDimensionException("Both matrices must be of same shape.");
 		}
 	}
 
@@ -368,4 +409,111 @@ public:
 		});
 	}
 
+	Matrix<T> Transpose() {
+		Matrix<T> transposed_(colsCount_, rowsCount_);
+
+		for (auto row = 0; row < rowsCount_; ++row) {
+			for (auto col = 0; col < colsCount_; ++col) {
+				transposed_(col, row) = (*this)(row, col);
+			}
+		}
+
+		return transposed_;
+	}
+
+	const Matrix<T> Transpose() const {
+		Matrix<T> transposed_(colsCount_, rowsCount_);
+
+		for (auto row = 0; row < rowsCount_; ++row) {
+			for (auto col = 0; col < colsCount_; ++col) {
+				transposed_(col, row) = (*this)(row, col);
+			}
+		}
+
+		return transposed_;
+	}
+
+	Matrix<T> GetRow(std::size_t rowIndex) {
+		if (rowIndex > rowsCount_ - 1 || rowIndex < 0) {
+			throw InvalidIndexException("You are trying to access row at index " + 
+										std::to_string(rowIndex) + 
+										". Matrix has only " + 
+										std::to_string(rowsCount_) +
+										" rows.");
+		}
+
+		Matrix<T> newMatrix_(1, colsCount_);
+		for (auto row = 0; row < rowsCount_; ++row) {
+			if (row == rowIndex) {
+				for (auto column = 0; column < colsCount_; ++column) {
+					newMatrix_(0, column) = (*this)(row, column);
+				}
+			}			
+		}
+
+		return newMatrix_;
+	}
+
+	const Matrix<T> GetRow(std::size_t rowIndex) const {
+		if (rowIndex > rowsCount_ - 1 || rowIndex < 0) {
+			throw InvalidIndexException("You are trying to access row at index " + 
+										std::to_string(rowIndex) + 
+										". Matrix has only " + 
+										std::to_string(rowsCount_) +
+										" rows.");
+		}
+
+		Matrix<T> newMatrix_(1, colsCount_);
+		for (auto row = 0; row < rowsCount_; ++row) {
+			if (row == rowIndex) {
+				for (auto column = 0; column < colsCount_; ++column) {
+					newMatrix_(0, column) = (*this)(row, column);
+				}
+			}			
+		}
+
+		return newMatrix_;
+	}
+
+	Matrix<T> GetColumn(std::size_t columnIndex) {
+		if (columnIndex > colsCount_ - 1 || columnIndex < 0) {
+			throw InvalidIndexException("You are trying to access column at index " + 
+										std::to_string(columnIndex) + 
+										". Matrix has only " + 
+										std::to_string(colsCount_) +
+										" columns.");
+		}
+
+		Matrix<T> newMatrix_(rowsCount_, 1);
+		for (auto column = 0; column < colsCount_; ++column) {
+			if (column == columnIndex) {
+				for (auto row = 0; row < rowsCount_; ++row) {
+					newMatrix_(row, 0) = (*this)(row, column);
+				}
+			}
+		}
+
+		return newMatrix_;
+	}
+
+	const Matrix<T> GetColumn(std::size_t columnIndex) const {
+		if (columnIndex > colsCount_ - 1 || columnIndex < 0) {
+			throw InvalidIndexException("You are trying to access column at index " + 
+										std::to_string(columnIndex) + 
+										". Matrix has only " + 
+										std::to_string(colsCount_) +
+										" columns.");
+		}
+
+		Matrix<T> newMatrix_(rowsCount_, 1);
+		for (auto column = 0; column < colsCount_; ++column) {
+			if (column == columnIndex) {
+				for (auto row = 0; row < rowsCount_; ++row) {
+					newMatrix_(row, 0) = (*this)(row, column);
+				}
+			}
+		}
+
+		return newMatrix_;
+	}
 };

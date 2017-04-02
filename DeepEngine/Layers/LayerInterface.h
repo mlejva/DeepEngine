@@ -13,34 +13,37 @@ namespace Layers {
     class LayerInterface {
 
     /* Private Methods */
-    private:
-        void SetLayer_(const std::size_t& outputSize) {            
+    private:        
+        void SetLayer_(const Matrix<T>& input, const std::size_t& outputSize) {            
             if (isInputLayer_) {
-                output_.InitializeWithZeros(input_.GetRowsCount(), input_.GetColsCount());
+                output_.InitializeWithZeros(input.GetRowsCount(), input.GetColsCount());
             }
             else {
-                output_.InitializeWithZeros(input_.GetRowsCount(), outputSize);
-                weights_.RandomInitialization(input_.GetColsCount(), outputSize);                
-                std::cout << "Weights: " << std::endl;
-                std::cout << weights_ << std::endl;
-
+                output_.InitializeWithZeros(input.GetRowsCount(), outputSize);
+                weights_.RandomInitialization(input.GetColsCount(), outputSize);                
+                
                 bias_.InitializeWithZeros(outputSize, 0);
             }    
         }
 
     /* Constructors */
     protected:
-        LayerInterface(const bool& isInputLayer = false) : input_(0, 0), weights_(0, 0), bias_(0), output_(0, 0), isInputLayer_(isInputLayer) { }
+        LayerInterface(const bool& isInputLayer = false) : 
+            input_(0, 0), 
+            weights_(0, 0), 
+            bias_(0), 
+            output_(0, 0), 
+            isInputLayer_(isInputLayer) { }
         LayerInterface(const Matrix<T>& input, const std::size_t& outputSize, const bool& isInputLayer = false) : 
-            input_(input), 
-            isInputLayer_(isInputLayer) {
-
-            SetLayer_(outputSize);
-        }
+            input_(input),
+            outputSize_(outputSize),
+            isInputLayer_(isInputLayer) { }
 
     /* Base & Children Properties */
     protected:
         const Matrix<T>& input_;
+        const std::size_t& outputSize_;
+
         Matrix<T> output_;
         Matrix<T> weights_;
         Matrix<T> bias_;                
@@ -83,21 +86,29 @@ namespace Layers {
         const Matrix<T>& GetWeights() { return weights_; }
     /* Public Methods */
     public:
-        void Forward() { 
+        void Forward() {
+            SetLayer_(input_, outputSize_);
             ApplyActivationFunction_(); 
         }
-        void Initialize(const Matrix<T>& input, const std::size_t& outputSize) {
-            SetLayer_(input, outputSize);
+        
+        void Initialize(const Matrix<T>& input) {
+            input_ = input;
+            SetLayer_(input_, outputSize_);
         }
         
-        const Matrix<T> ComputeLayerError(const Matrix<T>& previousLayerError) {                   
-            // Compute derivative of activation function with zValue_                            
-            const auto& actDerivative_ = activationFunction_->Derivative(zValue_);            
+        const Matrix<T> ComputeLayerError(const Matrix<T>& previousLayerError, const std::size_t& inputIndex) {                   
+            // Compute derivative of activation function with zValue_       
+            auto zValueForSingleInput_ = zValue_.GetRow(inputIndex).Transpose();  
+            const auto& actDerivative_ = activationFunction_->Derivative(zValueForSingleInput_);            
 
             Matrix<T> layerError_ = Matrix<T>::multiply(previousLayerError, actDerivative_);            
             return layerError_;
         }
         
+        void UpdateWeights(const Matrix<T>& deltaWeights/*, const Matrix<T>& biasDelta*/) {            
+            weights_ -= deltaWeights;            
+        }
+
         // TODO: DELETE BOTH WHEN DONE
         const std::string GetLayerInputShape() {
             std::stringstream ss;
