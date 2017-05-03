@@ -26,32 +26,25 @@ namespace Layers {
         std::unique_ptr<Functions::ActivationFunctionInterface<T>> activationFunction_;
 
         bool isInputLayer_;
-
-    /* Private Methods */
-    private:        
-        void SetLayer_(const Matrix<T>& input, const std::size_t outputSize) {            
-            if (isInputLayer_) {
-                output_.InitializeWithZeros(input.GetRowsCount(), input.GetColsCount());
-            }
-            else {
-                output_.InitializeWithZeros(input.GetRowsCount(), outputSize);
-                weights_.RandomInitialization(input.GetColsCount(), outputSize);                
-                
-                bias_.InitializeWithZeros(outputSize, 0);
-            }    
-        }
-
+        bool areWeightsInitialized_;
+   
     /* Constructors */
     protected:
-        LayerInterface(Matrix<T>& input, const std::size_t outputSize, const bool& isInputLayer = false) : 
+        LayerInterface(Matrix<T>& input, const std::size_t outputSize, const bool& isInputLayer = false, const bool& areWeightsInitialized = false) : 
             input_(input),
             outputSize_(outputSize),
-            isInputLayer_(isInputLayer) { }
+            isInputLayer_(isInputLayer),
+            areWeightsInitialized_(areWeightsInitialized) { }
     
     /* Base & Children Methods */
     protected:
         virtual void SetActivationFunction_() = 0;
-        void ApplyActivationFunction_() {       
+        void ApplyActivationFunction_() {      
+            if (!areWeightsInitialized_) {
+                weights_.RandomInitialization(input_.GetColsCount(), outputSize_); 
+                areWeightsInitialized_ = true;               
+            }
+
             if (isInputLayer_) {
                 zValue_.ReshapeWithMatrix(input_);
                 //output_ = input_;
@@ -80,13 +73,14 @@ namespace Layers {
     /* Public Methods */
     public:
         void Forward() {
-            //SetLayer_(input_, outputSize_); // TODO: Remove
             ApplyActivationFunction_(); 
         }
         
         void Initialize(const Matrix<T>& input) {
             input_ = input;
-            SetLayer_(input_, outputSize_);
+            if (isInputLayer_) {
+                output_.InitializeWithZeros(input.GetRowsCount(), input.GetColsCount());
+            }
         }
         
         const Matrix<T> ComputeLayerError(const Matrix<T>& previousLayerError, const std::size_t& inputIndex) {                   
@@ -100,22 +94,6 @@ namespace Layers {
         
         void UpdateWeights(const Matrix<T>& deltaWeights/*, const Matrix<T>& biasDelta*/) {            
             weights_ -= deltaWeights;            
-        }
-
-        // TODO: DELETE BOTH WHEN DONE
-        const std::string GetLayerInputShape() {
-            std::stringstream ss;
-            ss << "(" << input_.GetRowsCount() << "x" << input_.GetColsCount() << ")";
-
-            //const String& shape = "(" + input_.GetRowsCount() + "x" + input_.GetColsCount() + ")";
-            return ss.str();
-        }
-        const std::string GetLayerOutputShape() {
-            std::stringstream ss;
-            ss << "(" << output_.GetRowsCount() << "x" << output_.GetColsCount() << ")";
-
-            //const String& shape = "(" + input_.GetRowsCount() + "x" + input_.GetColsCount() + ")";
-            return ss.str();
-        }
+        }      
     };
 }

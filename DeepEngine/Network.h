@@ -26,19 +26,6 @@ private:
     // Loss and network predictions
     typedef std::tuple<double, Matrix<T>> T_networkOutput;
 
-/* Private Methods */
-private:
-    // Inserts new input into input layer
-    void SetInput_(const Matrix<T>& newInput) {
-        layers_.front()->Initialize(newInput);
-
-        for (auto i = 1; i < layers_.size(); ++i) {
-            auto& previousLayer_ = layers_[i - 1];
-            auto& currentLayer_ = layers_[i];
-
-            currentLayer_->Initialize(previousLayer_->GetOutput());
-        }
-    }
 
 /* Private methods for traversing the computational graph */
 private:
@@ -88,7 +75,9 @@ private:
     }     
 
      void ComputeActivations_(const Matrix<T>& input) {
-        SetInput_(input);
+        // Inserts new input into input layer
+        layers_.front()->Initialize(input);
+        
         for (const auto& layer : layers_) { layer->Forward(); }
     }
 
