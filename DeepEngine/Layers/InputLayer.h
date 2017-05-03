@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Layers/LayerInterface.h"
-#include "Functions/ActivationFunctions/IdentityActivationFunction.h"
+#include <memory>
+
+#include "../Layers/LayerInterface.h"
+#include "../Functions/ActivationFunctions/IdentityActivationFunction.h"
 
 namespace Layers {
     template <typename T>
@@ -10,11 +12,8 @@ namespace Layers {
         typedef Layers::LayerInterface<T> base;
     
     /* Constructors & Destructor */
-    public:
-        InputLayer() : base(true) { 
-            SetActivationFunction_(); 
-        }
-        InputLayer(const Matrix<T>& input) : base(input, 0, true) { 
+    public:        
+        InputLayer(Matrix<T>& input) : base(input, 0, true) { 
             SetActivationFunction_(); 
         }
     

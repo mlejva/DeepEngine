@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include "Matrix.h"
+#include "../../Matrix.h"
 
 namespace Functions {
 	template <typename T>

@@ -2,8 +2,8 @@
 
 #include <cmath>
 
-#include "Matrix.h"
-#include "Functions/LossFunctions/LossFunctionInterface.h"
+#include "../../Matrix.h"
+#include "../../Functions/LossFunctions/LossFunctionInterface.h"
 
 /*
 	Computes Mean Squared Error loss across all elements of both matrices.
@@ -42,7 +42,7 @@ namespace Functions {
 			}
 
 			const auto& totalElements_ = predicted.GetRowsCount() * predicted.GetColsCount();
-			T loss_ = (1.0 / totalElements_) * mse_; // 1/2n * sum((predicted_i - expected_i)^2)
+			T loss_ = /*(1.0 / totalElements_) * */ mse_; // 1/n * sum((predicted_i - expected_i)^2)
 			return loss_;			
 		}
 

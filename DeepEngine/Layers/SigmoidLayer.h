@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Layers/LayerInterface.h"
-#include "Functions/ActivationFunctions/SigmoidActivationFunction.h"
+#include "../Layers/LayerInterface.h"
+#include "../Functions/ActivationFunctions/SigmoidActivationFunction.h"
 
 namespace Layers {
     template <typename T>
@@ -11,10 +11,7 @@ namespace Layers {
     
     /* Constructors & Destructor */
     public:
-        SigmoidLayer() : base() { 
-            SetActivationFunction_(); 
-        }
-        SigmoidLayer(const Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
+        SigmoidLayer(Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
             SetActivationFunction_(); 
         }
 

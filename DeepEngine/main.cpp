@@ -1,70 +1,79 @@
 
-#include <iostream>
 #include <vector>
 #include <typeinfo>
 #include <memory>
+#include <iostream>
+#include <fstream>
 
 #include "Matrix.h"
 #include "Vector.h"
-#include "Graph.h"
+#include "Network.h"
 #include "Layers/ReluLayer.h"
 #include "Layers/SigmoidLayer.h"
 #include "Layers/IdentityLayer.h"
+#include "Layers/TanhLayer.h"
 #include "Functions/LossFunctions/MSELossFunction.h"
 
 typedef Functions::MSELossFunction<double> MSEDouble;
+typedef std::vector<double> D_Vector;
 
-int main() {		
-	// A row represents one input vector of length threeą
-	Matrix<double> input(4, 2);
-	input(0, 0) = 0.0;
-	input(0, 1) = 0.0;
+int main() {
 
-	input(1, 0) = 0.0;
-	input(1, 1) = 1.0;
+	double trueValue = 1.0;
+	double falseValue = -1.0; 
 
-	input(2, 0) = 1.0;
-	input(2, 1) = 0.0;
-
-	input(3, 0) = 1.0;
-	input(3, 1) = 1.0;
-	//std::cout << "Network Input:\n" << input << "\n=======" << std::endl;
-
-	Matrix<double> expected(4, 1);
-	expected(0, 0) = 0.0;
-	expected(1, 0) = 1.0;
-	expected(2, 0) = 1.0;
-	expected(3, 0) = 0.0;
+	/*Matrix<double> input(4, 2);
+	input.SetRow(0, D_Vector{trueValue, trueValue});
+	input.SetRow(1, D_Vector{trueValue, falseValue});
+	input.SetRow(2, D_Vector{falseValue, trueValue});
+	input.SetRow(3, D_Vector{falseValue, falseValue});
 	
-
-	//std::cout << "Network Expected:\n" << expected << "\n=======" << std::endl;
+	Matrix<double> expectedOutput(4, 1);
+	expectedOutput.SetColumn(0, D_Vector{trueValue, falseValue, falseValue, falseValue});*/
 	
-	Graph<double, MSEDouble> g;
-	g.AddLayer<Layers::SigmoidLayer<double>>(3); // Hidden layer
-	g.AddLayer<Layers::IdentityLayer<double>>(1); // Output layer
-	
-	Matrix<double> firstOutput_;
-	Matrix<double> lastOutput_;
-	for (auto i = 0; i < 1; ++i) {		
-		const auto& graphOutput_ = g.Train(input, expected); // 1x2
-		/*std::cout << "Run:" << std::endl;
-		std::cout << graphOutput_ << std::endl;
-		std::cout << "==========" << std::endl;
-		*/
+	Network<double, MSEDouble> n;
+	n.AddLayer<Layers::IdentityLayer<double>>(1); // Hidden layer	
 
-		lastOutput_ = graphOutput_;
-		if (i == 0)
-			firstOutput_ = graphOutput_;
+	Matrix<double> input("/Users/vasekmlejnsky/Desktop/input.txt", ';');
+	Matrix<double> expectedOutput("/Users/vasekmlejnsky/Desktop/expected.txt", ';');
+
+	int i = 0;
+	while (i < 10) {
+		//std::cout << "Epoch: " << std::to_string(i) << std::endl;
+		const auto& targets_ = n.Train(input, expectedOutput);
+		auto& loss_ = std::get<0>(targets_);
+		const auto& predictions_ = std::get<1>(targets_);
+		std::cout << "\tLoss: " << std::to_string(loss_) << std::endl;
+		/*std::cout << predictions_ << std::endl;*/
+		/*std::cout << "===" << std::endl;*/
+		++i;
 	}
 
-	/*	
-	std::cout << "First output: " << std::endl;
-	std::cout << firstOutput_ << std::endl;
+	/*std::ofstream lossFile("loss_out.txt");
+	for (std::size_t epoch = 0; epoch < 30; ++epoch) {
+		//std::cout << "Epoch: " << epoch << std::endl;
+		for (std::size_t batch = 0; batch < 10; ++batch) {
+			
+			for (std::size_t i = 0; i < 500; ++i) {		
+				const auto& xVal = Random(0, M_PI);		
+				const auto& yVal = std::sin(xVal);
 
-	std::cout << "Last output: " << std::endl;
-	std::cout << lastOutput_ << std::endl;
-	*/
+				//std::cout << "sin("<< xVal <<") = " << yVal << std::endl;
+				input(i, 0) = xVal;
+				expectedOutput(i, 0) = yVal;
+			}
 
-	std::cout << "Done" << std::endl;
+			const auto& targets_ = n.Train(input, expectedOutput);
+			const auto& loss_ = std::get<0>(targets_);
+			if (lossFile.is_open()) {				
+				lossFile << loss_ << std::endl;
+    		}   
+			//const auto& networkOutput_ = std::get<1>(targets_);				
+
+			//std::cout << "\tLoss: " << loss_ << "\t (batch " << batch << ")" << std::endl;
+		}
+	}
+	lossFile.close();*/
+
 	return 0;
 }

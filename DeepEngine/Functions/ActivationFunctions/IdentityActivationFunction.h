@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
+#include "../../Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
 namespace Functions {
     template <typename T>
@@ -17,7 +17,10 @@ namespace Functions {
         }
 
         Matrix<T> Derivative(Matrix<T>& param) {
-            return param;
+            Matrix<T> m;
+            
+            m.InitializeWithOnes(param.GetRowsCount(), param.GetColsCount());
+            return m;
         }        
     };
 }

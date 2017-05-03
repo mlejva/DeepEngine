@@ -16,7 +16,7 @@ Minor:
 - ❌ CustomLayer
 - ❌ Bezparametricke konstruktory layeru?
 - ❌ Overridnout operator "<<" u tridy Graph -> vypise strukturu grafu
-- ❌ Prejmenovat tridu Graph na tridu Network
+- ✅ Prejmenovat tridu Graph na tridu Network
 - ❌ Predelat nektere public metody (apply elementwise, hadamard) na staticke metody
 - ❗ metoda RandomInitialization() uvnitr Matrix.h je definovana pouze pro double typy
     - kdyz se zavola s jinym typem, tak se provede implicitni konverze
@@ -24,8 +24,9 @@ Minor:
 - ❌ predelat Apply u aktivacnich funkci, aby braly jako parametr matici a ne skalar
 - ❌ smazat Vector tridu
 - ❌ udelat Input layer nedostupny z klient kodu
-- ❌ prejmenovat matrix dimension exception na matrix shape exception
 - ❌ ma AddLayer neco vracet? (spis ne)
+- ❌ Preskladat poradi typu metod a properties ve vsech tridach - mit jedno dane poradi
+- ❌ Objekty by meli vracet hodnotou ne referenci svoje properties vs. velikost properties (obzvlast tech matic)
 =========
 
 Major:
@@ -41,7 +42,7 @@ Major:
 - ❌ move assignment operators
 - ✅ pridat namespace pro funkce
 - ✅ vector trida jako potomek Matrix
-- 🚧 graph class
+- 🚧 network class
     - ✅ sablonove?  
     - ✅ expected output
     - ❌ train()
@@ -50,8 +51,8 @@ Major:
     - 🚧 backprop vypocet v grafu
         - 🚧 gradient descent
         - ❌ stochastic gradient descent
-    - ❌ konstruktor by nemel brat jako parametry input a expected output, to by mel brat az train
-    - ❌ train ma vratit dvojici (predictedValues_, loss_)
+    - ✅ konstruktor by nemel brat jako parametry input a expected output, to by mel brat az train
+    - ✅ train ma vratit dvojici (predictedValues_, loss_)
 - 🚧 Loss interface
     - ✅ loss funkce
     - ✅ gradient vuci predicted output
@@ -59,7 +60,7 @@ Major:
     - ✅ layer input
     - ✅ layer output
     - ✅ activation function
-    - ❌ derivace aktivaci
+    - ✅ derivace aktivaci
     - ✅ weights
     - ❌ bias
     - ✅ output size
@@ -76,3 +77,10 @@ Major:
 (- ❌ postavit computational graf)
 - ❌ previous layer vs. next layer (nazvoslovi v Graph class) 
 - ❌ exception u matrix class, kdyz nekdo chce instancovat matici, co ma pocet radku/sloupcu 0 (musi byt aspon 1)
+- ❌ copy konstruktory ke vsemu
+- ❌ move konstruktory ke vsemu
+- ❌ Loss funkce by mela fungovat vzdy nad stejnym typem? A nemelo by to byt optional pro klienta? 
+- ❌ unit testy
+- ❌ prejmenovat WrongMatrixDimensionException na MatrixShapeException
+- ❌ prejmenovat InvalidIndexException na IndexException
+- ❓ vytvorit input/output preprocessor, co vzdy zplacati data, aby to mohla brat Matrix trida?

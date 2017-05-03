@@ -1,8 +1,8 @@
 #pragma once
 
 #include <algorithm>
-#include "Matrix.h"
-#include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
+#include "../../Matrix.h"
+#include "../../Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
 namespace Functions {
 	template <typename T>
@@ -26,7 +26,7 @@ namespace Functions {
 				else
 					el_ = 0.0;
             });
-
+			
 			return param;
 		}
 

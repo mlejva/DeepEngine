@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Matrix.h"
+#include "../../Matrix.h"
 
 namespace Functions {
 	template <typename T>

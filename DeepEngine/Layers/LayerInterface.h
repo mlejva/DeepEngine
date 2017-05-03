@@ -5,16 +5,31 @@
 #include <iostream>
 
 #include <algorithm>
-#include "Matrix.h"
-#include "Functions/ActivationFunctions/ActivationFunctionInterface.h"
+#include "../Matrix.h"
+#include "../Functions/ActivationFunctions/ActivationFunctionInterface.h"
 
 namespace Layers {    
     template <typename T>
     class LayerInterface {
 
+    /* Base & Children Properties */
+    protected:
+        Matrix<T>& input_;
+        const std::size_t outputSize_;
+
+        Matrix<T> output_;
+        Matrix<T> weights_;
+        Matrix<T> bias_;                
+
+        Matrix<T> zValue_;
+
+        std::unique_ptr<Functions::ActivationFunctionInterface<T>> activationFunction_;
+
+        bool isInputLayer_;
+
     /* Private Methods */
     private:        
-        void SetLayer_(const Matrix<T>& input, const std::size_t& outputSize) {            
+        void SetLayer_(const Matrix<T>& input, const std::size_t outputSize) {            
             if (isInputLayer_) {
                 output_.InitializeWithZeros(input.GetRowsCount(), input.GetColsCount());
             }
@@ -28,31 +43,10 @@ namespace Layers {
 
     /* Constructors */
     protected:
-        LayerInterface(const bool& isInputLayer = false) : 
-            input_(0, 0), 
-            weights_(0, 0), 
-            bias_(0), 
-            output_(0, 0), 
-            isInputLayer_(isInputLayer) { }
-        LayerInterface(const Matrix<T>& input, const std::size_t& outputSize, const bool& isInputLayer = false) : 
+        LayerInterface(Matrix<T>& input, const std::size_t outputSize, const bool& isInputLayer = false) : 
             input_(input),
             outputSize_(outputSize),
             isInputLayer_(isInputLayer) { }
-
-    /* Base & Children Properties */
-    protected:
-        const Matrix<T>& input_;
-        const std::size_t& outputSize_;
-
-        Matrix<T> output_;
-        Matrix<T> weights_;
-        Matrix<T> bias_;                
-
-        Matrix<T> zValue_;
-
-        std::unique_ptr<Functions::ActivationFunctionInterface<T>> activationFunction_;
-
-        bool isInputLayer_;
     
     /* Base & Children Methods */
     protected:
@@ -79,15 +73,14 @@ namespace Layers {
 
     /* Getters & Setters */
     public:        
-        const Matrix<T>& GetOutput() { return output_; }
+        Matrix<T>& GetOutput() { return output_; }
         const Matrix<T>& GetInput() { return input_; }
-        //void SetInput(const Matrix<T>& input) { input_.ResizeWithMatrix(input); } 
     
         const Matrix<T>& GetWeights() { return weights_; }
     /* Public Methods */
     public:
         void Forward() {
-            SetLayer_(input_, outputSize_);
+            //SetLayer_(input_, outputSize_); // TODO: Remove
             ApplyActivationFunction_(); 
         }
         
@@ -101,7 +94,7 @@ namespace Layers {
             auto zValueForSingleInput_ = zValue_.GetRow(inputIndex).Transpose();  
             const auto& actDerivative_ = activationFunction_->Derivative(zValueForSingleInput_);            
 
-            Matrix<T> layerError_ = Matrix<T>::multiply(previousLayerError, actDerivative_);            
+            Matrix<T> layerError_ = Matrix<T>::Multiply(previousLayerError, actDerivative_);            
             return layerError_;
         }
         
