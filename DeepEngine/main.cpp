@@ -31,25 +31,25 @@ int main() {
 	expectedOutput.SetColumn(0, D_Vector{trueValue, falseValue, falseValue, falseValue});*/
 	
 	Network<double, MSEDouble> n;
-	n.AddLayer<Layers::IdentityLayer<double>>(1); // Hidden layer	
+	n.AddLayer<Layers::ReluLayer<double>>(1); // Hidden layer	
 
 	Matrix<double> input("/Users/vasekmlejnsky/Desktop/input.txt", ';');
 	Matrix<double> expectedOutput("/Users/vasekmlejnsky/Desktop/expected.txt", ';');
 
 	int i = 0;
-	while (i < 100) {
-		std::cout << "Epoch: " << std::to_string(i) << std::endl;
+	while (i < 10000) {
+		/*std::cout << "Epoch: " << std::to_string(i) << std::endl;*/
 
 		const auto& targets_ = n.Train(input, expectedOutput);
 		auto& loss_ = std::get<0>(targets_);
 		const auto& predictions_ = std::get<1>(targets_);
 
 		std::cout << "Loss train: " << std::to_string(loss_) << std::endl;
-		/*std::cout << predictions_ << std::endl;*/
+		std::cout << predictions_ << std::endl;
 
 		const auto& testTargets_ = n.Evaluate(input, expectedOutput);
 		const auto& testLoss_ = std::get<0>(testTargets_);
-		std::cout << "Loss test: " << std::to_string(testLoss_) << std::endl;
+		/*std::cout << "Loss test: " << std::to_string(testLoss_) << std::endl;*/
 		/*std::cout << "===" << std::endl;*/
 		++i;
 	}	

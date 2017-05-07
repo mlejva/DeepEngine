@@ -24,7 +24,7 @@ namespace Functions {
                 if (el_ > 0.0)
 					el_ = 1.0;
 				else
-					el_ = 0.0;
+					el_ = 0.0; // Leaky ReLU: 0.01
             });
 			
 			return param;

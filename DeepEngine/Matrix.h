@@ -206,29 +206,19 @@ public:
 		return data_[colsCount_ * rowPos + colPos];
 	}
 
-	const Matrix<T>& operator= (const Matrix<T>& m) {
-		//ResizeMatrix_(m.rowsCount_, m.colsCount_);
-
-		//if (this->rowsCount_ != m.rowsCount_ || this->colsCount_ != m.colsCount_)
-		/*if (*this != m)
-			throw MatrixShapeException("You are trying to assign to a matrix with different shape.");
-		*/
-		rowsCount_ = m.rowsCount_;
-		colsCount_ = m.colsCount_;
-		data_ = m.data_;				
-
-		return *this;
-		/*
-		if (this->rowsCount_ == m.rowsCount_ && this->colsCount_ == m.colsCount_) {
-			this->data_ = m.data_;
-			this->rowsCount_ = m.rowsCount_;
-			this->colsCount_ = m.colsCount_;
-			return *this;
+	const Matrix<T>& operator= (const Matrix<T>& m) {	
+		if ((this->rowsCount_ == m.rowsCount_ && this->colsCount_ == m.colsCount_) || 
+			(this->rowsCount_ == 0 && this->colsCount_ == 0)) { // We can assign new matrix to an uninitialized matrix
+			
+			rowsCount_ = m.rowsCount_;
+			colsCount_ = m.colsCount_;
+			data_ = m.data_;				
 		}
 		else {
-			throw MatrixShapeException("Both matrices must have same dimensions.");
+			throw MatrixShapeException("You are trying to assign to a matrix with different shape.");
 		}
-		*/
+
+		return *this;		
 	}		
 
 	friend std::ostream& operator<<(std::ostream& s, const Matrix<T>& m) {

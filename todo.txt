@@ -6,7 +6,7 @@
 
 =========
 
-Minor:
+Minor pro v0.1.X:
 - ❌ matrix pretty print
 - ✅ zmenit raw pointery na smart pointery
 - ✅ vyresit warningy od Clangu
@@ -27,20 +27,17 @@ Minor:
 - ❌ ma AddLayer neco vracet? (spis ne)
 - ❌ Preskladat poradi typu metod a properties ve vsech tridach - mit jedno dane poradi
 - ❌ Objekty by meli vracet hodnotou ne referenci svoje properties vs. velikost properties (obzvlast tech matic)
-- ✅ README.MD
+- ❌ Pridat leaky ReLU
 =========
 
-Major v. 0.1.0:
-- ❌❌❌ Podpora pro vice nez 2D matice ---> implementace tensoru ---> predelani vsech layeru + layer interface + vsech funkci                                            
-    ---> templaty s promennym poctem parametru
+Major pro 0.1.0:
+- ✅ README.MD
 - ✅ Dummy input layer (ten, co je tam implicitne vzdy) provede operaci: "input * weights + b". Coz by asi prave tento input dummy layer delat nemel
     - Nejspis by mel proste jen zkopirovat vstup a nic jineho. Tohle pusobi tak, ze o tom user nevi
     - Navrh reseni: trida "DummyInputLayer" jako potomek "IdentityLayer"?
 - ✅ nejspis oddelat ApplyFunctionElementWise a radeji primo u funkci mit verze, co berou matice
     - nebo radeji aby ApplyFunctionElementWise brala pointer na funkci
     - vyreseno tak, ze jsem oddelal cele ApplyFunctionElementWise a dal pristup k begin a end iteratorum pro data_
-- ❌ move constructors
-- ❌ move assignment operators
 - ✅ pridat namespace pro funkce
 - ✅ vector trida jako potomek Matrix
 - ✅ network class
@@ -79,8 +76,14 @@ Major v. 0.1.0:
 - ❌ exception u matrix class, kdyz nekdo chce instancovat matici, co ma pocet radku/sloupcu 0 (musi byt aspon 1)
 - ❌ copy konstruktory ke vsemu
 - ❌ move konstruktory ke vsemu
+- ❌ move assignment operators
 - ❌ Loss funkce by mela fungovat vzdy nad stejnym typem? A nemelo by to byt optional pro klienta? 
 - ❌ unit testy
 - ✅ prejmenovat WrongMatrixDimensionException na MatrixShapeException
-- ❌ prejmenovat InvalidIndexException na IndexException
+- ✅ prejmenovat InvalidIndexException na IndexException
 - ❓ vytvorit input/output preprocessor, co vzdy zplacati data, aby to mohla brat Matrix trida?
+=========
+
+Major pro 1.0.0: 
+- ❌❌❌ Podpora pro vice nez 2D matice ---> implementace tensoru ---> predelani vsech layeru + layer interface + vsech funkci                                            
+    ---> templaty s promennym poctem parametru
