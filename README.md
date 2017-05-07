@@ -1,6 +1,6 @@
 # Deep Engine
 
-Deep Engine is library for building simple feed-forward neural networks
+Deep Engine is a library for building simple feed-forward neural networks
 
 Usage
 ==========
@@ -28,6 +28,8 @@ myNetwork.AddLayer<Layers::SigmoidLayer<double>>(2);
 
 3. Train the network
 ```Cpp
+#import "Matrix.h"
+
 const char delimiter = ';';
 Matrix<double> trainInput("/trainInput.txt", delimiter);
 Matrix<double> trainExpectedOutput("/trainExpected.txt", delimiter);
@@ -35,6 +37,7 @@ Matrix<double> trainExpectedOutput("/trainExpected.txt", delimiter);
 int i = 0;
 while (i < 100) {
     std::cout << "Epoch: " << std::to_string(i) << std::endl;
+
     const auto& targets = n.Train(trainInput, trainExpectedOutput);
     const auto& loss = std::get<0>(targets);
     const auto& predictions = std::get<1>(targets);
@@ -54,6 +57,7 @@ Matrix<double> testExpectedOutput("/testExpected.txt", delimiter);
 const auto& testTargets = n.Evaluate(testInput, testExpectedOutput);
 const auto& testLoss = std::get<0>(testTargets);
 const auto& testPredictions = std::get<1>(testTargets);
+
 std::cout << "Loss test: " << std::to_string(testLoss) << std::endl;
 std::cout << testPredictions << std::endl;
 ```
