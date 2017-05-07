@@ -28,7 +28,7 @@ myNetwork.AddLayer<Layers::SigmoidLayer<double>>(2);
 
 3. Train the network
 ```Cpp
-#import "Matrix.h"
+#include "Matrix.h"
 
 const char delimiter = ';';
 Matrix<double> trainInput("/trainInput.txt", delimiter);
