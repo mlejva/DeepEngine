@@ -22,7 +22,8 @@ Network<double, MSEDouble> myNetwork;
 #include "Layers/IdentityLayer.h"
 #include "Layers/TanhLayer.h"
 
-myNetwork.AddLayer<Layers::IdentityLayer<double>>(10); // Specify number neurons in a layer (= size of layers' output)
+// Specify the number of neurons in a layer (i.e. size of output of a layer)
+myNetwork.AddLayer<Layers::IdentityLayer<double>>(10); 
 myNetwork.AddLayer<Layers::SigmoidLayer<double>>(2);
 ```
 
@@ -38,7 +39,7 @@ int i = 0;
 while (i < 100) {
     std::cout << "Epoch: " << std::to_string(i) << std::endl;
 
-    const auto& targets = n.Train(trainInput, trainExpectedOutput);
+    const auto& targets = myNetwork.Train(trainInput, trainExpectedOutput);
     const auto& loss = std::get<0>(targets);
     const auto& predictions = std::get<1>(targets);
 
@@ -54,7 +55,7 @@ while (i < 100) {
 Matrix<double> testInput("/testInput.txt", delimiter);
 Matrix<double> testExpectedOutput("/testExpected.txt", delimiter);
 
-const auto& testTargets = n.Evaluate(testInput, testExpectedOutput);
+const auto& testTargets = myNetwork.Evaluate(testInput, testExpectedOutput);
 const auto& testLoss = std::get<0>(testTargets);
 const auto& testPredictions = std::get<1>(testTargets);
 
