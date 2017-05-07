@@ -11,9 +11,9 @@
 #include <vector>
 #include <exception>
 
-class WrongMatrixDimensionException : public std::runtime_error {
+class MatrixShapeException : public std::runtime_error {
 public:
-	WrongMatrixDimensionException(const std::string& message) : runtime_error(message) { }
+	MatrixShapeException(const std::string& message) : runtime_error(message) { }
 };
 
 class InvalidIndexException : public std::runtime_error {
@@ -33,7 +33,7 @@ public:
 	// Computes a Hadamard product of two matrices
 	static Matrix<T> Multiply(const Matrix<T>& left, const Matrix<T>& right) {
 		if (left != right)
-			throw WrongMatrixDimensionException("Both matrices must have the same shape.");
+			throw MatrixShapeException("Both matrices must have the same shape.");
 		
 		const auto& rowsTotal_ = left.GetRowsCount();
 		const auto& colsTotal_ = left.GetColsCount();
@@ -66,7 +66,7 @@ private:
 		rowsCount_++;
 
 		if (newRow.size() != colsCount_) {
-			throw WrongMatrixDimensionException("You are trying to add a row with the length of " +
+			throw MatrixShapeException("You are trying to add a row with the length of " +
 												std::to_string(newRow.size()) + 
 												" to a matrix with the row length of " +
 												std::to_string(colsCount_) + ".");
@@ -81,7 +81,7 @@ private:
 		rowsCount_++;
 
 		if (newRow.size() != colsCount_) {
-			throw WrongMatrixDimensionException("You are trying to add a row with the length of " +
+			throw MatrixShapeException("You are trying to add a row with the length of " +
 												std::to_string(newRow.size()) + 
 												" to a matrix with the row length of " +
 												std::to_string(colsCount_) + ".");
@@ -152,7 +152,7 @@ public:
 
 	Matrix<T>& operator+= (const Matrix<T>& m) {
 		if (*this != m)
-			throw WrongMatrixDimensionException("Both matrices must be of same shape.");
+			throw MatrixShapeException("Both matrices must be of same shape.");
 
 		for (std::size_t row = 0; row < this->rowsCount_; ++row) {
 			for (std::size_t column = 0; column < this->colsCount_; ++column) {
@@ -164,7 +164,7 @@ public:
 
 	Matrix<T>& operator-= (const Matrix<T>& m) {
 		if (*this != m)
-			throw WrongMatrixDimensionException("Both matrices must be of same shape.");
+			throw MatrixShapeException("Both matrices must be of same shape.");
 
 		for (std::size_t row = 0; row < this->rowsCount_; ++row) {
 			for (std::size_t column = 0; column < this->colsCount_; ++column) {
@@ -211,7 +211,7 @@ public:
 
 		//if (this->rowsCount_ != m.rowsCount_ || this->colsCount_ != m.colsCount_)
 		/*if (*this != m)
-			throw WrongMatrixDimensionException("You are trying to assign to a matrix with different shape.");
+			throw MatrixShapeException("You are trying to assign to a matrix with different shape.");
 		*/
 		rowsCount_ = m.rowsCount_;
 		colsCount_ = m.colsCount_;
@@ -226,7 +226,7 @@ public:
 			return *this;
 		}
 		else {
-			throw WrongMatrixDimensionException("Both matrices must have same dimensions.");
+			throw MatrixShapeException("Both matrices must have same dimensions.");
 		}
 		*/
 	}		
@@ -257,7 +257,7 @@ public:
 			return newMatrix_;
 		}
 		else {
-			throw WrongMatrixDimensionException("Both matrices must be of same shape.");
+			throw MatrixShapeException("Both matrices must be of same shape.");
 		}
 	}
 
@@ -272,7 +272,7 @@ public:
 			return newMatrix_;
 		}
 		else {
-			throw WrongMatrixDimensionException("Both matrices must have same dimensions.");
+			throw MatrixShapeException("Both matrices must have same dimensions.");
 		}
 	}		
 
@@ -287,7 +287,7 @@ public:
 			return newMatrix_;
 		}
 		else {
-			throw WrongMatrixDimensionException("Both matrices must have same dimensions.");
+			throw MatrixShapeException("Both matrices must have same dimensions.");
 		}
 	}
 
@@ -302,13 +302,13 @@ public:
 			return newMatrix_;
 		}
 		else {
-			throw WrongMatrixDimensionException("Both matrices must have same dimensions.");
+			throw MatrixShapeException("Both matrices must have same dimensions.");
 		}
 	}
 
 	Matrix<T> operator* (const Matrix<T>& m) {
 		if (this->colsCount_ != m.rowsCount_)				
-			throw WrongMatrixDimensionException("The left-hand matrix must have the same width as is the height of the right-hand matrix.");
+			throw MatrixShapeException("The left-hand matrix must have the same width as is the height of the right-hand matrix.");
 
 		Matrix<T> newMatrix_(this->rowsCount_, m.colsCount_);
 		for (std::size_t row = 0; row < newMatrix_.rowsCount_; ++row) {
@@ -325,7 +325,7 @@ public:
 
 	const Matrix<T> operator* (const Matrix<T>& m) const {
 		if (this->colsCount_ != m.rowsCount_)			
-			throw WrongMatrixDimensionException("The left-hand matrix must have the same width as is the height of the right-hand matrix.");			
+			throw MatrixShapeException("The left-hand matrix must have the same width as is the height of the right-hand matrix.");			
 
 		Matrix<T> newMatrix_(this->rowsCount_, m.colsCount_);
 		for (std::size_t row = 0; row < newMatrix_.rowsCount_; ++row) {
@@ -512,11 +512,11 @@ public:
 
 		// newRow should be a matrix of a shape (1, this->rowsCount_)
 		if (newRow.rowsCount_ != 1) {
-			throw WrongMatrixDimensionException("You are trying to assign multiple or zero rows to a single row.");
+			throw MatrixShapeException("You are trying to assign multiple or zero rows to a single row.");
 		}
 
 		if (newRow.colsCount_ != colsCount_) {
-			throw WrongMatrixDimensionException("You are trying to assign a row with the length of " +
+			throw MatrixShapeException("You are trying to assign a row with the length of " +
 												std::to_string(newRow.colsCount_) + 
 												" to a matrix with the row length of " +
 												std::to_string(colsCount_) + ".");
@@ -537,7 +537,7 @@ public:
 		}		
 
 		if (newRow.size() != colsCount_) {
-			throw WrongMatrixDimensionException("You are trying to assign a row with the length of " +
+			throw MatrixShapeException("You are trying to assign a row with the length of " +
 												std::to_string(newRow.size()) + 
 												" to a matrix with the row length of " +
 												std::to_string(colsCount_) + ".");
@@ -559,11 +559,11 @@ public:
 
 		// newColumn should be a matrix of a shape (this->colsCount_, 1)
 		if (newColumn.colsCount_ != 1) {
-			throw WrongMatrixDimensionException("You are trying to assign multiple or zero columns to a single column.");
+			throw MatrixShapeException("You are trying to assign multiple or zero columns to a single column.");
 		}
 
 		if (newColumn.rowsCount_ != rowsCount_) {
-			throw WrongMatrixDimensionException("You are trying to assign a column with the length of " +
+			throw MatrixShapeException("You are trying to assign a column with the length of " +
 												std::to_string(newColumn.rowsCount_) + 
 												" to a matrix with the column length of " +
 												std::to_string(rowsCount_) + ".");
@@ -584,7 +584,7 @@ public:
 		}		
 
 		if (newColumn.size() != rowsCount_) {
-			throw WrongMatrixDimensionException("You are trying to assign a column with the length of " +
+			throw MatrixShapeException("You are trying to assign a column with the length of " +
 												std::to_string(newColumn.size()) + 
 												" to a matrix with the column length of " +
 												std::to_string(rowsCount_) + ".");

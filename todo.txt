@@ -22,15 +22,15 @@ Minor:
     - kdyz se zavola s jinym typem, tak se provede implicitni konverze
 - ❌ const verze metod pro funkce
 - ❌ predelat Apply u aktivacnich funkci, aby braly jako parametr matici a ne skalar
-- ❌ smazat Vector tridu
+- ✅ smazat Vector tridu
 - ❌ udelat Input layer nedostupny z klient kodu
 - ❌ ma AddLayer neco vracet? (spis ne)
 - ❌ Preskladat poradi typu metod a properties ve vsech tridach - mit jedno dane poradi
 - ❌ Objekty by meli vracet hodnotou ne referenci svoje properties vs. velikost properties (obzvlast tech matic)
-- ❌ README.MD
+- ✅ README.MD
 =========
 
-Major:
+Major v. 0.1.0:
 - ❌❌❌ Podpora pro vice nez 2D matice ---> implementace tensoru ---> predelani vsech layeru + layer interface + vsech funkci                                            
     ---> templaty s promennym poctem parametru
 - ✅ Dummy input layer (ten, co je tam implicitne vzdy) provede operaci: "input * weights + b". Coz by asi prave tento input dummy layer delat nemel
