@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+main.cpp
+
 # Files for proper configuration of VS Code for C++
 .vscode
 a.out
