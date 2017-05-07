@@ -27,6 +27,7 @@ Minor:
 - ❌ ma AddLayer neco vracet? (spis ne)
 - ❌ Preskladat poradi typu metod a properties ve vsech tridach - mit jedno dane poradi
 - ❌ Objekty by meli vracet hodnotou ne referenci svoje properties vs. velikost properties (obzvlast tech matic)
+- ❌ README.MD
 =========
 
 Major:
