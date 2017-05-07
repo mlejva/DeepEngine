@@ -16,9 +16,9 @@ public:
 	MatrixShapeException(const std::string& message) : runtime_error(message) { }
 };
 
-class InvalidIndexException : public std::runtime_error {
+class IndexException : public std::runtime_error {
 public:
-	InvalidIndexException(const std::string& message) : runtime_error(message) { }
+	IndexException(const std::string& message) : runtime_error(message) { }
 };
 
 template <typename T>
@@ -194,14 +194,14 @@ public:
 
 	T& operator() (const std::size_t& rowPos, const std::size_t& colPos) {			
 		if (rowPos > rowsCount_ || colPos > colsCount_)
-			throw InvalidIndexException("Index you are trying to access is not valid.");
+			throw IndexException("Index you are trying to access is not valid.");
 
 		return data_[rowPos * colsCount_ + colPos];
 	}
 
 	const T& operator() (const std::size_t& rowPos, const std::size_t& colPos) const {			
 		if (rowPos > rowsCount_ || colPos > colsCount_)
-			throw InvalidIndexException("Index you are trying to access is not valid.");
+			throw IndexException("Index you are trying to access is not valid.");
 
 		return data_[colsCount_ * rowPos + colPos];
 	}
@@ -415,7 +415,7 @@ public:
 
 	Matrix<T> GetRow(std::size_t rowIndex) {
 		if (rowIndex > rowsCount_ - 1 || rowIndex < 0) {
-			throw InvalidIndexException("You are trying to access row at index " + 
+			throw IndexException("You are trying to access row at index " + 
 										std::to_string(rowIndex) + 
 										". Matrix has only " + 
 										std::to_string(rowsCount_) +
@@ -437,7 +437,7 @@ public:
 
 	const Matrix<T> GetRow(std::size_t rowIndex) const {
 		if (rowIndex > rowsCount_ - 1 || rowIndex < 0) {
-			throw InvalidIndexException("You are trying to access row at index " + 
+			throw IndexException("You are trying to access row at index " + 
 										std::to_string(rowIndex) + 
 										". Matrix has only " + 
 										std::to_string(rowsCount_) +
@@ -459,7 +459,7 @@ public:
 
 	Matrix<T> GetColumn(std::size_t columnIndex) {
 		if (columnIndex > colsCount_ - 1 || columnIndex < 0) {
-			throw InvalidIndexException("You are trying to access column at index " + 
+			throw IndexException("You are trying to access column at index " + 
 										std::to_string(columnIndex) + 
 										". Matrix has only " + 
 										std::to_string(colsCount_) +
@@ -481,7 +481,7 @@ public:
 
 	const Matrix<T> GetColumn(std::size_t columnIndex) const {
 		if (columnIndex > colsCount_ - 1 || columnIndex < 0) {
-			throw InvalidIndexException("You are trying to access column at index " + 
+			throw IndexException("You are trying to access column at index " + 
 										std::to_string(columnIndex) + 
 										". Matrix has only " + 
 										std::to_string(colsCount_) +
@@ -503,7 +503,7 @@ public:
 
 	void SetRow(std::size_t rowIndex, const Matrix<T>& newRow) {
 		if (rowIndex > rowsCount_ - 1 || rowIndex < 0) {
-			throw InvalidIndexException("You are trying to set row at index " + 
+			throw IndexException("You are trying to set row at index " + 
 										std::to_string(rowIndex) + 
 										". Matrix has only " + 
 										std::to_string(rowsCount_) +
@@ -529,7 +529,7 @@ public:
 
 	void SetRow(std::size_t rowIndex, const std::vector<T>& newRow) const {
 		if (rowIndex > rowsCount_ - 1 || rowIndex < 0) {
-			throw InvalidIndexException("You are trying to set row at index " + 
+			throw IndexException("You are trying to set row at index " + 
 										std::to_string(rowIndex) + 
 										". Matrix has only " + 
 										std::to_string(rowsCount_) +
@@ -550,7 +550,7 @@ public:
 
 	void SetColumn(std::size_t columnIndex, const Matrix<T>& newColumn) {
 		if (columnIndex > colsCount_ - 1 || columnIndex < 0) {
-			throw InvalidIndexException("You are trying to set column at index " + 
+			throw IndexException("You are trying to set column at index " + 
 										std::to_string(columnIndex) + 
 										". Matrix has only " + 
 										std::to_string(colsCount_) +
@@ -576,7 +576,7 @@ public:
 	
 	void SetColumn(std::size_t columnIndex, const std::vector<T>& newColumn) {
 		if (columnIndex > colsCount_ - 1 || columnIndex < 0) {
-			throw InvalidIndexException("You are trying to set column at index " + 
+			throw IndexException("You are trying to set column at index " + 
 										std::to_string(columnIndex) + 
 										". Matrix has only " + 
 										std::to_string(colsCount_) +

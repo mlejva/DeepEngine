@@ -81,6 +81,6 @@ Major v. 0.1.0:
 - ❌ move konstruktory ke vsemu
 - ❌ Loss funkce by mela fungovat vzdy nad stejnym typem? A nemelo by to byt optional pro klienta? 
 - ❌ unit testy
-- ❌ prejmenovat WrongMatrixDimensionException na MatrixShapeException
+- ✅ prejmenovat WrongMatrixDimensionException na MatrixShapeException
 - ❌ prejmenovat InvalidIndexException na IndexException
 - ❓ vytvorit input/output preprocessor, co vzdy zplacati data, aby to mohla brat Matrix trida?
