@@ -709,4 +709,9 @@ public:
 
 		return transposed_;
 	}
+
+	void SaveToFile(const std::string& path) const {
+		std::ofstream outputFile_(path);		
+		outputFile_ << *this;
+	}
 };

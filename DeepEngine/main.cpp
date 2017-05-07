@@ -6,7 +6,6 @@
 #include <fstream>
 
 #include "Matrix.h"
-#include "Vector.h"
 #include "Network.h"
 #include "Layers/ReluLayer.h"
 #include "Layers/SigmoidLayer.h"
@@ -38,42 +37,22 @@ int main() {
 	Matrix<double> expectedOutput("/Users/vasekmlejnsky/Desktop/expected.txt", ';');
 
 	int i = 0;
-	while (i < 500) {
-		//std::cout << "Epoch: " << std::to_string(i) << std::endl;
+	while (i < 5) {
+		std::cout << "Epoch: " << std::to_string(i) << std::endl;
+
 		const auto& targets_ = n.Train(input, expectedOutput);
 		auto& loss_ = std::get<0>(targets_);
 		const auto& predictions_ = std::get<1>(targets_);
-		std::cout << "\tLoss: " << std::to_string(loss_) << std::endl;
-		std::cout << predictions_ << std::endl;
+
+		std::cout << "Loss train: " << std::to_string(loss_) << std::endl;
+		std::cout << predictions_ << std::endl;
+
+		const auto& testTargets_ = n.Evaluate(input, expectedOutput);
+		const auto& testLoss_ = std::get<0>(testTargets_);
+		std::cout << "Loss test: " << std::to_string(testLoss_) << std::endl;
 		std::cout << "===" << std::endl;
 		++i;
-	}
-
-	/*std::ofstream lossFile("loss_out.txt");
-	for (std::size_t epoch = 0; epoch < 30; ++epoch) {
-		//std::cout << "Epoch: " << epoch << std::endl;
-		for (std::size_t batch = 0; batch < 10; ++batch) {
-			
-			for (std::size_t i = 0; i < 500; ++i) {		
-				const auto& xVal = Random(0, M_PI);		
-				const auto& yVal = std::sin(xVal);
-
-				//std::cout << "sin("<< xVal <<") = " << yVal << std::endl;
-				input(i, 0) = xVal;
-				expectedOutput(i, 0) = yVal;
-			}
-
-			const auto& targets_ = n.Train(input, expectedOutput);
-			const auto& loss_ = std::get<0>(targets_);
-			if (lossFile.is_open()) {				
-				lossFile << loss_ << std::endl;
-    		}   
-			//const auto& networkOutput_ = std::get<1>(targets_);				
-
-			//std::cout << "\tLoss: " << loss_ << "\t (batch " << batch << ")" << std::endl;
-		}
-	}
-	lossFile.close();*/
+	}	
 
 	return 0;
 }

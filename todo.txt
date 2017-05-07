@@ -42,18 +42,18 @@ Major:
 - ❌ move assignment operators
 - ✅ pridat namespace pro funkce
 - ✅ vector trida jako potomek Matrix
-- 🚧 network class
+- ✅ network class
     - ✅ sablonove?  
     - ✅ expected output
-    - ❌ train()
-    - ❌ test()
+    - ✅ train()
+    - ✅ test()
     - ✅ forward vypocet v grafu
-    - 🚧 backprop vypocet v grafu
-        - 🚧 gradient descent
-        - ❌ stochastic gradient descent
+    - ✅ backprop vypocet v grafu
+        - ✅ gradient descent
+        - ✅ stochastic gradient descent
     - ✅ konstruktor by nemel brat jako parametry input a expected output, to by mel brat az train
     - ✅ train ma vratit dvojici (predictedValues_, loss_)
-- 🚧 Loss interface
+- ✅ Loss interface
     - ✅ loss funkce
     - ✅ gradient vuci predicted output
 - 🚧 layer interface
@@ -70,11 +70,10 @@ Major:
 - ✅ jednotlive vrstvy
     - ✅ uvnitr graph class
     - ✅ stejny typ jako graf
-- 🚧 activation funkce interface
+- ✅ activation funkce interface
     - ✅ interface
     - ✅ konkretni aktivacni funkce
-    - 🚧 derivace aktivacnich funkci
-(- ❌ postavit computational graf)
+    - ✅ derivace aktivacnich funkci
 - ❌ previous layer vs. next layer (nazvoslovi v Graph class) 
 - ❌ exception u matrix class, kdyz nekdo chce instancovat matici, co ma pocet radku/sloupcu 0 (musi byt aspon 1)
 - ❌ copy konstruktory ke vsemu
