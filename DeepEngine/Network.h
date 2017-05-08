@@ -2,7 +2,6 @@
 
 #include <tuple>
 #include <vector>
-#include <unordered_map>
 #include <array>
 #include <algorithm>
 #include <iostream>
@@ -16,6 +15,11 @@
 
 template <typename T, typename LossFunctionType>
 class Network {
+
+private:
+    // Loss and network predictions
+    typedef std::tuple<double, Matrix<T>> T_networkOutput;
+
 /* Private Properties */
 private:    
     std::vector<std::unique_ptr<Layers::LayerInterface<T> > > layers_;
@@ -23,11 +27,28 @@ private:
 
     std::unique_ptr<Matrix<T> > input_;
 
-/* Private Typedefs */
-private:
-    // Loss and network predictions
-    typedef std::tuple<double, Matrix<T>> T_networkOutput;
+/* Constructors & Destructor */
+public:
+    Network() {
+        // Dummy input_ must be created so that input layer can be initialized
+        input_ = std::make_unique<Matrix<T>>(0, 0);
 
+        lossFunction_ = std::unique_ptr<Functions::LossFunctionInterface<T>>(new LossFunctionType()); 
+
+        // layers_ are not yet initialized (i.e. user just created an instance of network and wants to add layers)
+        // input layer must be the first layer
+        std::unique_ptr<Layers::LayerInterface<T>> inputLayer_(new Layers::InputLayer<T>((*input_)));
+        layers_.push_back(std::move(inputLayer_));
+    }   
+
+    // Move constructor
+    Network(Network<T, LossFunctionType>&& n) {
+        this->layers_ = std::move(n.layers_);
+        this->lossFunction_ = std::move(n.lossFunction_);
+        this->input_ = std::move(n.input_);
+    }
+
+    ~Network() { }
 
 /* Private methods for traversing the computational graph */
 private:
@@ -41,6 +62,7 @@ private:
     }       
 
     T_networkOutput Forward_(const Matrix<T>& input, const Matrix<T>& expectedOutput) {
+
         ComputeActivations_(input);        
 
         const auto& predictedOutput_ = layers_.back()->GetOutput();
@@ -76,21 +98,22 @@ private:
         SGD_(batchSize_, layerErrorsForAllInputs_, 0.01);             
     }     
 
-     void ComputeActivations_(const Matrix<T>& input) {
-        // Inserts new input into input layer
+    void ComputeActivations_(const Matrix<T>& input) {
+        // Inserts new input into the input layer
         layers_.front()->Initialize(input);
         
         for (const auto& layer : layers_) { layer->Forward(); }
     }
 
     const std::vector<Matrix<T>> BackpropagateError_(const Matrix<T>& outputError, const std::size_t inputIndex) {
-        const auto& layerErrorsSize_ = layers_.size() - 1; // -1 because the input layer is not hidden nor output layer (=> no weights)
+        const auto& layerErrorsSize_ = layers_.size() - 1; // -1 because the input layer is not hidden nor output layer (-> no weights)
         std::vector<Matrix<T>> layerErrors_(layerErrorsSize_);
         layerErrors_[layerErrorsSize_ - 1] = outputError;      
 
-        // - 2 because error for the output layer is already computed
-        const auto& layersTotal_ = layers_.size();
-        for (std::size_t layerIndex = layersTotal_ - 2; layerIndex > 0; --layerIndex) {            
+        // -1 because error for the output layer is already computed
+        for (std::size_t layerIndex = layerErrorsSize_ - 1; layerIndex > 0; --layerIndex) {  
+            // We are iterating from the end
+            // -> followingLayer is closer to the output
             const auto& followingLayer_ = layers_[layerIndex + 1];
             const auto& currentLayer_ = layers_[layerIndex];
 
@@ -112,8 +135,8 @@ private:
         const auto& layersTotal_ = layers_.size();
 
         for (std::size_t layerIndex = layersTotal_ - 1; layerIndex > 0; --layerIndex) {
-            const auto& currentLayer_ = layers_.at(layerIndex);
-            const auto& previousLayer_ = layers_.at(layerIndex - 1);
+            const auto& currentLayer_ = layers_[layerIndex];
+            const auto& previousLayer_ = layers_[layerIndex - 1];
 
             Matrix<T> layerDeltaWeights_;
             Matrix<T> layerDeltaBias_;
@@ -147,30 +170,6 @@ private:
         }
     }   
 
-/* Constructors & Destructor */
-public:
-    Network() {
-        // Dummy input_ must be created so that input layer can be initialized
-        input_ = std::make_unique<Matrix<T>>(0, 0);
-
-        lossFunction_ = std::unique_ptr<Functions::LossFunctionInterface<T>>(new LossFunctionType()); 
-
-        // layers_ are not yet initialized (i.e. user just created an instance of network and wants to add layers)
-        // input layer must be the first layer
-        std::unique_ptr<Layers::LayerInterface<T>> inputLayer_(new Layers::InputLayer<T>((*input_)));
-        layers_.push_back(std::move(inputLayer_));
-    }   
-
-    // Move constructor
-    Network(Network<T, LossFunctionType>&& n) {
-        this->layers_ = std::move(n.layers_);
-        this->lossFunction_ = std::move(n.lossFunction_);
-        this->input_ = std::move(n.input_);
-    }
-
-    ~Network() { }
-
-
 /* Public Methods */
 public:
     template <typename LayerType>
@@ -198,4 +197,3 @@ public:
         return targets_;
     }
 };
-
