@@ -39,25 +39,33 @@ namespace Layers {
     /* Base & Children Methods */
     protected:
         virtual void SetActivationFunction_() = 0;
-        void ApplyActivationFunction_() {      
-            if (!areWeightsInitialized_) {
-                weights_.RandomInitialization(input_.GetColsCount(), outputSize_); 
-                areWeightsInitialized_ = true;               
-            }
-
+        void ApplyActivationFunction_() {                  
             if (isInputLayer_) {
                 zValue_.ReshapeWithMatrix(input_);
-                //output_ = input_;
+                output_ = zValue_;
             }
             else {
-                zValue_.ReshapeWithMatrix(input_ * weights_);// + bias_; // z_n
-                //output_ = input_ * weights_;// + bias_; // z_n
-            }            
+                if (!areWeightsInitialized_) {
+                    weights_.XavierInitialization(input_.GetColsCount(), outputSize_); 
+                    bias_.InitializeWithZeros(1, outputSize_);
+                    areWeightsInitialized_ = true;   
 
-            output_ = zValue_;
-            std::for_each(output_.GetDataBegin(), output_.GetDataEnd(), [&](T& el_) {
-                el_ = activationFunction_->Apply(el_);
-            });
+                    /*std::cout << "Weights: " << std::endl;
+                    std::cout << weights_ << std::endl;            
+
+                    std::cout << "Bias: " << std::endl;
+                    std::cout << bias_ << std::endl;*/
+                }
+                zValue_.ReshapeWithMatrix(input_ * weights_);
+
+                output_ = zValue_;
+                for (std::size_t row = 0; row < output_.GetRowsCount(); ++row) {
+                    for (std::size_t col = 0; col < output_.GetColsCount(); ++col) {
+                        T& el_ = output_(row, col);
+                        el_ = activationFunction_->Apply(el_ + bias_(1, col));
+                    }
+                }
+            }                       
         }
 
     /* Destructor */
@@ -92,8 +100,21 @@ namespace Layers {
             return layerError_;
         }
         
-        void UpdateWeights(const Matrix<T>& deltaWeights/*, const Matrix<T>& biasDelta*/) {            
-            weights_ -= deltaWeights;            
+        void UpdateWeights(const Matrix<T>& deltaWeights, const Matrix<T>& deltaBias) {            
+           /* std::cout << "Delta Weights: " << std::endl;
+            std::cout << deltaWeights << std::endl;
+
+            std::cout << "Delta Bias: " << std::endl;
+            std::cout << deltaBias << std::endl;*/
+
+            weights_ -= deltaWeights;   
+            bias_ -= deltaBias;         
+            
+            /*std::cout << "Weights: " << std::endl;
+            std::cout << weights_ << std::endl;            
+
+            std::cout << "Bias: " << std::endl;
+            std::cout << bias_ << std::endl;*/
         }      
     };
 }

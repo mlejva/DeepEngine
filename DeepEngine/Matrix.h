@@ -3,6 +3,7 @@
 // TODO: Delete
 #include <iostream>
 
+#include <typeinfo>
 #include <sstream>
 #include <fstream>
 #include <algorithm>
@@ -30,7 +31,7 @@ public:
 
 	}*/
 	
-	// Computes a Hadamard product of two matrices
+	// Computes a Hadamard product (i.e. element-wise product) of two matrices
 	static Matrix<T> Multiply(const Matrix<T>& left, const Matrix<T>& right) {
 		if (left != right)
 			throw MatrixShapeException("Both matrices must have the same shape.");
@@ -127,11 +128,13 @@ public:
 		std::string firstLine_;
 		std::getline(file_, firstLine_);
 		
+		// Add first line
 		auto tokens_ = TokenizeString_(firstLine_, delimiter);
 		colsCount_ = tokens_.size();
 		rowsCount_ = 0;
 		AddRow_(tokens_);
 
+		// Add every other line
 		while (std::getline(file_, line_)) {
 			tokens_ = TokenizeString_(line_, delimiter);
 			AddRow_(tokens_);
@@ -585,6 +588,8 @@ public:
 		}
 	}
 
+	// TODO: If totalRows is greater than (rowsCount_ - startIndex) should throw exception or return all possible rows?
+
 	Matrix<T> GetRowsFromIndex(std::size_t startIndex, std::size_t totalRows) {
 		Matrix<T> m(totalRows, this->colsCount_);
 		
@@ -614,38 +619,62 @@ public:
 		this->data_ = m.data_;
 	}		
 
-	void RandomInitialization() {
+	void XavierInitialization() {
 		std::random_device rd_; // Obtain a random number from hardware
 		// A Mersenne Twister pseudo-random generator of 32-bit numbers 
 		// with a state size of 19937 bits.
 		std::mt19937 gen_(rd_()); // Seed the generator
-		// Xavier initialization
-		T start_ = -(sqrt(6.0 / (this->rowsCount_ + this->colsCount_)));
-		T end_ = (sqrt(6.0 / (this->rowsCount_ + this->colsCount_)));
-		// TODO: Now works only normal distribution for real numbers
-		std::uniform_real_distribution<> distr_(start_, end_); // Define the range
 		
-		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
-			el_ = distr_(gen_);
-		});
+		if (typeid(T) == typeid(int)) {
+			// Xavier initialization
+			int start_ = static_cast<int>( -sqrt(6 / (this->rowsCount_ + this->colsCount_)) );
+			int end_ = static_cast<int>( sqrt(6 / (this->rowsCount_ + this->colsCount_)) );
+			std::uniform_int_distribution<> distr_(start_, end_);
+
+			std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
+				el_ = distr_(gen_);
+			});
+		}
+		else {
+			// Xavier initialization
+			T start_ = -sqrt(6.0 / (this->rowsCount_ + this->colsCount_));
+			T end_ = sqrt(6.0 / (this->rowsCount_ + this->colsCount_));			
+			std::uniform_real_distribution<T> distr_(start_, end_);
+
+			std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
+				el_ = distr_(gen_);
+			});
+		}				
 	}
 
-	void RandomInitialization(const std::size_t& rows, const std::size_t& cols) {
+	void XavierInitialization(const std::size_t& rows, const std::size_t& cols) {
 		ResizeMatrix_(rows, cols);
 
 		std::random_device rd_; // Obtain a random number from hardware
 		// A Mersenne Twister pseudo-random generator of 32-bit numbers 
 		// with a state size of 19937 bits.
 		std::mt19937 gen_(rd_()); // Seed the generator
-		// Xavier initialization
-		T start_ = -(sqrt(6.0 / (this->rowsCount_ + this->colsCount_)));
-		T end_ = (sqrt(6.0 / (this->rowsCount_ + this->colsCount_)));
-		// TODO: Now works only normal distribution for real numbers
-		std::uniform_real_distribution<> distr_(start_, end_); // Define the range
 		
-		std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
-			el_ = distr_(gen_);
-		});
+		if (typeid(T) == typeid(int)) {
+			// Xavier initialization
+			int start_ = static_cast<int>( -sqrt(6 / (this->rowsCount_ + this->colsCount_)) );
+			int end_ = static_cast<int>( sqrt(6 / (this->rowsCount_ + this->colsCount_)) );
+			std::uniform_int_distribution<> distr_(start_, end_);
+
+			std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
+				el_ = distr_(gen_);
+			});
+		}
+		else {
+			// Xavier initialization
+			T start_ = -sqrt(6.0 / (this->rowsCount_ + this->colsCount_));
+			T end_ = sqrt(6.0 / (this->rowsCount_ + this->colsCount_));			
+			std::uniform_real_distribution<T> distr_(start_, end_);
+
+			std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
+				el_ = distr_(gen_);
+			});
+		}	
 	}
 
 	void InitializeWithZeros() {

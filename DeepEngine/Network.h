@@ -114,6 +114,7 @@ private:
             const auto& previousLayer_ = layers_.at(layerIndex - 1);
 
             Matrix<T> layerDeltaWeights_;
+            Matrix<T> layerDeltaBias_;
             // Sum layer errors for the given single input
             for (std::size_t inputIndex = 0; inputIndex < batchSize; ++inputIndex) {                
                 // Returns a vector of Matrix<T> 
@@ -125,17 +126,22 @@ private:
                 const auto& error_ = layerErrorsForSingleInput_[layerIndex - 1];
                 const auto& activations_ = previousLayer_->GetOutput().GetRow(inputIndex);
 
-                auto& deltaWeights_ = activations_.Transpose() * error_.Transpose();                
+                auto& deltaWeights_ = activations_.Transpose() * error_.Transpose();                                
                 if (layerDeltaWeights_ != deltaWeights_) // If not same shape
                     layerDeltaWeights_.InitializeWithZeros(deltaWeights_.GetRowsCount(), deltaWeights_.GetColsCount());
+
+                auto& deltaBias_ = error_.Transpose();
+                if (layerDeltaBias_ != deltaBias_)
+                    layerDeltaBias_.InitializeWithZeros(deltaBias_.GetRowsCount(),  deltaBias_.GetColsCount());
                 
                 layerDeltaWeights_ += deltaWeights_;
+                layerDeltaBias_ += deltaBias_;
             }
 
             layerDeltaWeights_ = layerDeltaWeights_ * (learningRate / batchSize);
-            /*std::cout << layerDeltaWeights_ << std::endl;
-            std::cout <<  "===" << std::endl;*/
-            currentLayer_->UpdateWeights(layerDeltaWeights_);
+            layerDeltaBias_ = layerDeltaBias_ * (learningRate / batchSize);
+            
+            currentLayer_->UpdateWeights(layerDeltaWeights_, layerDeltaBias_);
         }
     }   
 

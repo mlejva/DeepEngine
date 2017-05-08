@@ -35,9 +35,10 @@ int main() {
 
 	Matrix<double> input("/Users/vasekmlejnsky/Desktop/input.txt", ';');
 	Matrix<double> expectedOutput("/Users/vasekmlejnsky/Desktop/expected.txt", ';');
+	
 
 	int i = 0;
-	while (i < 10000) {
+	while (i < 5) {
 		/*std::cout << "Epoch: " << std::to_string(i) << std::endl;*/
 
 		const auto& targets_ = n.Train(input, expectedOutput);
@@ -49,8 +50,8 @@ int main() {
 
 		const auto& testTargets_ = n.Evaluate(input, expectedOutput);
 		const auto& testLoss_ = std::get<0>(testTargets_);
-		/*std::cout << "Loss test: " << std::to_string(testLoss_) << std::endl;*/
-		/*std::cout << "===" << std::endl;*/
+		std::cout << "Loss test: " << std::to_string(testLoss_) << std::endl;
+		std::cout << "===" << std::endl;
 		++i;
 	}	
 
