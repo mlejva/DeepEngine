@@ -23,7 +23,7 @@ namespace Layers {
 
         Matrix<T> zValue_;
 
-        std::unique_ptr<Functions::ActivationFunctionInterface<T>> activationFunction_;
+        std::unique_ptr<Functions::ActivationFunctionInterface<T> > activationFunction_;
 
         bool isInputLayer_;
         bool areWeightsInitialized_;
