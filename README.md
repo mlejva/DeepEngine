@@ -1,6 +1,8 @@
 # Deep Engine
+## Version 0.1.0
 
 Deep Engine is a library for building simple feed-forward neural networks
+
 
 Usage
 ==========
