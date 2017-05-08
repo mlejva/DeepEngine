@@ -7,7 +7,7 @@
 
 /*
 	Computes Mean Squared Error loss across all elements of both matrices.
-	Both matrices must have same shape.
+	Both matrices must have the same shape.
 */
 
 namespace Functions {
@@ -42,7 +42,7 @@ namespace Functions {
 			}
 
 			const auto& totalElements_ = predicted.GetRowsCount() * predicted.GetColsCount();
-			T loss_ = /*(1.0 / totalElements_) * */ mse_; // 1/n * sum((predicted_i - expected_i)^2)
+			T loss_ = (1.0 / totalElements_) * mse_; // 1/n * sum((predicted_i - expected_i)^2)
 			return loss_;			
 		}
 

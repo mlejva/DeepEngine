@@ -5,7 +5,7 @@
 
 namespace Functions {
 	template <typename T>
-	class ActivationFunctionInterface {
+	class ActivationFunctionInterface {	
 	/* Constructor & Destructor */
 	public:
 		ActivationFunctionInterface() { }

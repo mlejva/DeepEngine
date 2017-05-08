@@ -15,7 +15,7 @@ namespace Layers {
             SetActivationFunction_(); 
         }
 
-    /* Overrides */      
+    /* Public Methods */      
     private:
         virtual void SetActivationFunction_() {
             base::activationFunction_ = std::make_unique<Functions::IdentityActivationFunction<T>>();

@@ -1,9 +1,5 @@
 #pragma once
 
-// TODO: DELETE
-#include <sstream> 
-#include <iostream>
-
 #include <algorithm>
 #include "../Matrix.h"
 #include "../Functions/ActivationFunctions/ActivationFunctionInterface.h"
@@ -23,7 +19,7 @@ namespace Layers {
 
         Matrix<T> zValue_;
 
-        std::unique_ptr<Functions::ActivationFunctionInterface<T>> activationFunction_;
+        std::unique_ptr<Functions::ActivationFunctionInterface<T> > activationFunction_;
 
         bool isInputLayer_;
         bool areWeightsInitialized_;
@@ -36,40 +32,45 @@ namespace Layers {
             isInputLayer_(isInputLayer),
             areWeightsInitialized_(areWeightsInitialized) { }
     
+    /* Destructor */
+    public:
+        virtual ~LayerInterface() { }
+
     /* Base & Children Methods */
     protected:
         virtual void SetActivationFunction_() = 0;
-        void ApplyActivationFunction_() {      
-            if (!areWeightsInitialized_) {
-                weights_.RandomInitialization(input_.GetColsCount(), outputSize_); 
-                areWeightsInitialized_ = true;               
-            }
-
+        void ApplyActivationFunction_() {                  
             if (isInputLayer_) {
                 zValue_.ReshapeWithMatrix(input_);
-                //output_ = input_;
+                output_ = zValue_;
             }
             else {
-                zValue_.ReshapeWithMatrix(input_ * weights_);// + bias_; // z_n
-                //output_ = input_ * weights_;// + bias_; // z_n
-            }            
+                // Initialize weights while traversing layers for the first time
+                if (!areWeightsInitialized_) {
+                    const std::size_t& layerInputSize_ = input_.GetRowsCount();                    
+                    weights_.XavierInitialization(input_.GetColsCount(), outputSize_, layerInputSize_, outputSize_); 
+                    bias_.InitializeWithOnes(1, outputSize_);                    
 
-            output_ = zValue_;
-            std::for_each(output_.GetDataBegin(), output_.GetDataEnd(), [&](T& el_) {
-                el_ = activationFunction_->Apply(el_);
-            });
+                    areWeightsInitialized_ = true;   
+                }
+                zValue_.ReshapeWithMatrix(input_ * weights_);
+
+                output_ = zValue_;
+                for (std::size_t row = 0; row < output_.GetRowsCount(); ++row) {
+                    for (std::size_t col = 0; col < output_.GetColsCount(); ++col) {
+                        T& el_ = output_(row, col);                        
+                        el_ = activationFunction_->Apply(el_ + bias_(0, col));
+                    }
+                }
+            }                       
         }
-
-    /* Destructor */
-    public:
-        virtual ~LayerInterface() { }
 
     /* Getters & Setters */
     public:        
         Matrix<T>& GetOutput() { return output_; }
         const Matrix<T>& GetInput() { return input_; }
-    
         const Matrix<T>& GetWeights() { return weights_; }
+    
     /* Public Methods */
     public:
         void Forward() {
@@ -77,10 +78,7 @@ namespace Layers {
         }
         
         void Initialize(const Matrix<T>& input) {
-            input_ = input;
-            if (isInputLayer_) {
-                output_.InitializeWithZeros(input.GetRowsCount(), input.GetColsCount());
-            }
+            input_ = input;            
         }
         
         const Matrix<T> ComputeLayerError(const Matrix<T>& previousLayerError, const std::size_t& inputIndex) {                   
@@ -92,8 +90,9 @@ namespace Layers {
             return layerError_;
         }
         
-        void UpdateWeights(const Matrix<T>& deltaWeights/*, const Matrix<T>& biasDelta*/) {            
-            weights_ -= deltaWeights;            
+        void UpdateWeights(const Matrix<T>& deltaWeights, const Matrix<T>& deltaBias) {                       
+            weights_ -= deltaWeights;   
+            bias_ -= deltaBias;                                             
         }      
     };
 }
