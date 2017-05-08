@@ -59,7 +59,7 @@ namespace Layers {
                 for (std::size_t row = 0; row < output_.GetRowsCount(); ++row) {
                     for (std::size_t col = 0; col < output_.GetColsCount(); ++col) {
                         T& el_ = output_(row, col);                        
-                        el_ = activationFunction_->Apply(el_ + bias_(1, col));
+                        el_ = activationFunction_->Apply(el_ + bias_(0, col));
                     }
                 }
             }                       
