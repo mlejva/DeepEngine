@@ -63,7 +63,7 @@ Major pro 0.1.0:
     - ✅ activation function
     - ✅ derivace aktivaci
     - ✅ weights
-    - ❌ bias
+    - ✅ bias
     - ✅ output size
     - ✅ activations
     - ❌❌ Projit inicializaci matic v LayerInterface, mozna se provadi nejake operaci navic (reshapovani, etc)
@@ -80,7 +80,7 @@ Major pro 0.1.0:
 - ❌ copy konstruktory ke vsemu
 - ❌ move konstruktory ke vsemu
 - ❌ move assignment operators
-- ❌ Loss funkce by mela fungovat vzdy nad stejnym typem? A nemelo by to byt optional pro klienta? 
+- ❓ Loss funkce by mela fungovat vzdy nad stejnym typem? A nemelo by to byt optional pro klienta? 
 - ❌ unit testy
 - ✅ prejmenovat WrongMatrixDimensionException na MatrixShapeException
 - ✅ prejmenovat InvalidIndexException na IndexException

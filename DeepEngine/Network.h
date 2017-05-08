@@ -12,6 +12,8 @@
 #include "./Layers/LayerInterface.h"
 #include "./Functions/LossFunctions/LossFunctionInterface.h"
 
+// Version 0.1.0 //
+
 template <typename T, typename LossFunctionType>
 class Network {
 /* Private Properties */
