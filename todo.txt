@@ -15,8 +15,8 @@ Minor pro v0.1.X:
 - ❌ T& vs T&&
 - ❌ CustomLayer
 - ❌ Bezparametricke konstruktory layeru?
-- ❌ Overridnout operator "<<" u tridy Graph -> vypise strukturu grafu
-- ✅ Prejmenovat tridu Graph na tridu Network
+- ❌ Overridnout operator "<<" u tridy Network -> vypise strukturu grafu
+- ✅ Prejmenovat tridu Network na tridu Network
 - ❌ Predelat nektere public metody (apply elementwise, hadamard) na staticke metody
 - ✅ metoda XavierInitialization() uvnitr Matrix.h je definovana pouze pro double typy
     - kdyz se zavola s jinym typem, tak se provede implicitni konverze
@@ -31,6 +31,11 @@ Minor pro v0.1.X:
 - ✅ Prejmenovat XavierInitialization na XavierInitialization u Matrix
 - ❓ Zrusit u Matrix "*" operator a nahradit ho statickou funkci "dot"
 - ❓ Dava XavierInitialization u celociselne matice vubec nejaky smysl?
+- ❓ vytvorit input/output preprocessor, co vzdy zplacati data, aby to mohla brat Matrix trida?
+- ❓ Loss funkce by mela fungovat vzdy nad stejnym typem? A nemelo by to byt optional pro klienta? 
+- ❓ copy konstruktory ke vsemu
+- ❓ move konstruktory ke vsemu
+- ❓ move assignment operators
 =========
 
 Major pro 0.1.0:
@@ -57,36 +62,33 @@ Major pro 0.1.0:
 - ✅ Loss interface
     - ✅ loss funkce
     - ✅ gradient vuci predicted output
-- 🚧 layer interface
+- ✅ layer interface
     - ✅ layer input
     - ✅ layer output
     - ✅ activation function
     - ✅ derivace aktivaci
     - ✅ weights
-    - ❌ bias
+    - ✅ bias
     - ✅ output size
     - ✅ activations
-    - ❌❌ Projit inicializaci matic v LayerInterface, mozna se provadi nejake operaci navic (reshapovani, etc)
-        ---> - ❓ dovolit operatoru = u Matrix class, dosazeni matice jinych rozmeru do jine matice?
+    - ✅ Projit inicializaci matic v LayerInterface, mozna se provadi nejake operaci navic (reshapovani, etc)
+        - dovolit operatoru = u Matrix class, dosazeni matice jinych rozmeru do jine matice?
+            - Muzu dosadit do matice, co ma 0 radku a 0 sloupcu matici s jinym rozmerem, jinak se musi shodovat rozmery
 - ✅ jednotlive vrstvy
-    - ✅ uvnitr graph class
+    - ✅ uvnitr Network class
     - ✅ stejny typ jako graf
 - ✅ activation funkce interface
     - ✅ interface
     - ✅ konkretni aktivacni funkce
     - ✅ derivace aktivacnich funkci
-- ❌ previous layer vs. next layer (nazvoslovi v Graph class) 
-- ❓ exception u matrix class, kdyz nekdo chce instancovat matici, co ma pocet radku/sloupcu 0 (musi byt aspon 1?)
-- ❌ copy konstruktory ke vsemu
-- ❌ move konstruktory ke vsemu
-- ❌ move assignment operators
-- ❌ Loss funkce by mela fungovat vzdy nad stejnym typem? A nemelo by to byt optional pro klienta? 
-- ❌ unit testy
+- ✅ previous layer vs. next layer (nazvoslovi v Network class) 
+- ✅ exception u matrix class, kdyz nekdo chce instancovat matici, co ma pocet radku/sloupcu 0 (musi byt aspon 1?)
+    - lze instancovat matici s 0 radky a 0 sloupci - bere se jako neinicializovana matice 
 - ✅ prejmenovat WrongMatrixDimensionException na MatrixShapeException
 - ✅ prejmenovat InvalidIndexException na IndexException
-- ❓ vytvorit input/output preprocessor, co vzdy zplacati data, aby to mohla brat Matrix trida?
 =========
 
 Major pro 1.0.0: 
 - ❌❌❌ Podpora pro vice nez 2D matice ---> implementace tensoru ---> predelani vsech layeru + layer interface + vsech funkci                                            
     ---> templaty s promennym poctem parametru
+- ❌ unit testy

@@ -1,9 +1,5 @@
 #pragma once
 
-// TODO: DELETE
-#include <sstream> 
-#include <iostream>
-
 #include <algorithm>
 #include "../Matrix.h"
 #include "../Functions/ActivationFunctions/ActivationFunctionInterface.h"
@@ -36,6 +32,10 @@ namespace Layers {
             isInputLayer_(isInputLayer),
             areWeightsInitialized_(areWeightsInitialized) { }
     
+    /* Destructor */
+    public:
+        virtual ~LayerInterface() { }
+
     /* Base & Children Methods */
     protected:
         virtual void SetActivationFunction_() = 0;
@@ -65,16 +65,12 @@ namespace Layers {
             }                       
         }
 
-    /* Destructor */
-    public:
-        virtual ~LayerInterface() { }
-
     /* Getters & Setters */
     public:        
         Matrix<T>& GetOutput() { return output_; }
         const Matrix<T>& GetInput() { return input_; }
-    
         const Matrix<T>& GetWeights() { return weights_; }
+    
     /* Public Methods */
     public:
         void Forward() {
@@ -82,10 +78,7 @@ namespace Layers {
         }
         
         void Initialize(const Matrix<T>& input) {
-            input_ = input;
-            if (isInputLayer_) {
-                output_.InitializeWithZeros(input.GetRowsCount(), input.GetColsCount());
-            }
+            input_ = input;            
         }
         
         const Matrix<T> ComputeLayerError(const Matrix<T>& previousLayerError, const std::size_t& inputIndex) {                   

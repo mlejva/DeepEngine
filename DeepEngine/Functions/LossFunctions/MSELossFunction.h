@@ -7,7 +7,7 @@
 
 /*
 	Computes Mean Squared Error loss across all elements of both matrices.
-	Both matrices must have same shape.
+	Both matrices must have the same shape.
 */
 
 namespace Functions {

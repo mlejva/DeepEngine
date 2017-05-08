@@ -19,24 +19,13 @@ namespace Functions {
 		}
 
 		Matrix<T> Derivative(Matrix<T>& param) {
-			//Matrix<T> newMatrix_(param)
             std::for_each(param.GetDataBegin(), param.GetDataEnd(), [&](T& el_) {
                 if (el_ > 0.0)
 					el_ = 1.0;
 				else
 					el_ = 0.0; // Leaky ReLU: 0.01
-            });
-			
+            });			
 			return param;
 		}
-
-		/*
-		T ComputeDerivative(const T& param) {
-			if (param > 0.0)
-				return 1.0;
-			else
-				return 0.0;
-		}
-		*/
 	};
 }

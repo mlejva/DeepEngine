@@ -20,13 +20,11 @@ namespace Functions {
 		}
 
 		Matrix<T> Derivative(Matrix<T>& param) {
-			//Matrix<T> newMatrix_(param)
             std::for_each(param.GetDataBegin(), param.GetDataEnd(), [&](T& el_) {            
 				// 1 - tanh^2(x)			
 				const T th_ = tanh(el_);
     			el_ = 1 - (th_ * th_);
             });
-
 			return param;
 		}		
 	};
