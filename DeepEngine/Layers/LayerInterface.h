@@ -45,10 +45,11 @@ namespace Layers {
                 output_ = zValue_;
             }
             else {
+                // Initialize weights while traversing layers for the first time
                 if (!areWeightsInitialized_) {
                     const std::size_t& layerInputSize_ = input_.GetRowsCount();                    
                     weights_.XavierInitialization(input_.GetColsCount(), outputSize_, layerInputSize_, outputSize_); 
-                    bias_.InitializeWithOnes(1, outputSize_);
+                    bias_.InitializeWithOnes(1, outputSize_);                    
 
                     areWeightsInitialized_ = true;   
                 }
@@ -57,7 +58,7 @@ namespace Layers {
                 output_ = zValue_;
                 for (std::size_t row = 0; row < output_.GetRowsCount(); ++row) {
                     for (std::size_t col = 0; col < output_.GetColsCount(); ++col) {
-                        T& el_ = output_(row, col);
+                        T& el_ = output_(row, col);                        
                         el_ = activationFunction_->Apply(el_ + bias_(1, col));
                     }
                 }
@@ -98,7 +99,7 @@ namespace Layers {
         
         void UpdateWeights(const Matrix<T>& deltaWeights, const Matrix<T>& deltaBias) {                       
             weights_ -= deltaWeights;   
-            bias_ -= deltaBias;                     
+            bias_ -= deltaBias;                                             
         }      
     };
 }

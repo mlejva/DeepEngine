@@ -13,12 +13,15 @@
 #include "Layers/TanhLayer.h"
 #include "Functions/LossFunctions/MSELossFunction.h"
 
+
 typedef Functions::MSELossFunction<double> MSEDouble;
 typedef Functions::MSELossFunction<float> MSEFloat;
 typedef std::vector<double> D_Vector;
 
 int main() {
 
+
+	
 	double trueValue = 1.0;
 	double falseValue = -1.0; 
 
@@ -31,15 +34,15 @@ int main() {
 	Matrix<double> expectedOutput(4, 1);
 	expectedOutput.SetColumn(0, D_Vector{trueValue, falseValue, falseValue, falseValue});*/
 	
-	Network<float, MSEFloat> n;
-	n.AddLayer<Layers::ReluLayer<float>>(1); // Hidden layer	
+	Network<double, MSEDouble> n;
+	n.AddLayer<Layers::IdentityLayer<double>>(1); // Hidden layer	
 
-	Matrix<float> input("/Users/vasekmlejnsky/Desktop/input.txt", ';');
-	Matrix<float> expectedOutput("/Users/vasekmlejnsky/Desktop/expected.txt", ';');
+	Matrix<double> input("/Users/vasekmlejnsky/Desktop/input.txt", ';');
+	Matrix<double> expectedOutput("/Users/vasekmlejnsky/Desktop/expected.txt", ';');
 	
 
 	int i = 0;
-	while (i < 1000) {
+	while (i < 10) {
 		/*std::cout << "Epoch: " << std::to_string(i) << std::endl;*/
 
 		const auto& targets_ = n.Train(input, expectedOutput);

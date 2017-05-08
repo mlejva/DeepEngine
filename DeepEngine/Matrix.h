@@ -643,7 +643,7 @@ public:
 		else {
 			// Xavier initialization
 			T start_ = -sqrt(6.0 / (layerInputSize + layerOutputSize));
-			T end_ = sqrt(6.0 / (layerInputSize + layerOutputSize));			
+			T end_ = sqrt(6.0 / (layerInputSize + layerOutputSize));
 			std::uniform_real_distribution<T> distr_(start_, end_);
 
 			std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
