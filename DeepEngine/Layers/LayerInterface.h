@@ -46,15 +46,11 @@ namespace Layers {
             }
             else {
                 if (!areWeightsInitialized_) {
-                    weights_.XavierInitialization(input_.GetColsCount(), outputSize_); 
-                    bias_.InitializeWithZeros(1, outputSize_);
+                    const std::size_t& layerInputSize_ = input_.GetRowsCount();                    
+                    weights_.XavierInitialization(input_.GetColsCount(), outputSize_, layerInputSize_, outputSize_); 
+                    bias_.InitializeWithOnes(1, outputSize_);
+
                     areWeightsInitialized_ = true;   
-
-                    /*std::cout << "Weights: " << std::endl;
-                    std::cout << weights_ << std::endl;            
-
-                    std::cout << "Bias: " << std::endl;
-                    std::cout << bias_ << std::endl;*/
                 }
                 zValue_.ReshapeWithMatrix(input_ * weights_);
 
@@ -100,21 +96,9 @@ namespace Layers {
             return layerError_;
         }
         
-        void UpdateWeights(const Matrix<T>& deltaWeights, const Matrix<T>& deltaBias) {            
-           /* std::cout << "Delta Weights: " << std::endl;
-            std::cout << deltaWeights << std::endl;
-
-            std::cout << "Delta Bias: " << std::endl;
-            std::cout << deltaBias << std::endl;*/
-
+        void UpdateWeights(const Matrix<T>& deltaWeights, const Matrix<T>& deltaBias) {                       
             weights_ -= deltaWeights;   
-            bias_ -= deltaBias;         
-            
-            /*std::cout << "Weights: " << std::endl;
-            std::cout << weights_ << std::endl;            
-
-            std::cout << "Bias: " << std::endl;
-            std::cout << bias_ << std::endl;*/
+            bias_ -= deltaBias;                     
         }      
     };
 }

@@ -617,37 +617,12 @@ public:
 	void ReshapeWithMatrix(const Matrix<T>& m) {
 		ResizeMatrix_(m.rowsCount_, m.colsCount_);
 		this->data_ = m.data_;
-	}		
+	}			
 
-	void XavierInitialization() {
-		std::random_device rd_; // Obtain a random number from hardware
-		// A Mersenne Twister pseudo-random generator of 32-bit numbers 
-		// with a state size of 19937 bits.
-		std::mt19937 gen_(rd_()); // Seed the generator
-		
-		if (typeid(T) == typeid(int)) {
-			// Xavier initialization
-			int start_ = static_cast<int>( -sqrt(6 / (this->rowsCount_ + this->colsCount_)) );
-			int end_ = static_cast<int>( sqrt(6 / (this->rowsCount_ + this->colsCount_)) );
-			std::uniform_int_distribution<> distr_(start_, end_);
-
-			std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
-				el_ = distr_(gen_);
-			});
-		}
-		else {
-			// Xavier initialization
-			T start_ = -sqrt(6.0 / (this->rowsCount_ + this->colsCount_));
-			T end_ = sqrt(6.0 / (this->rowsCount_ + this->colsCount_));			
-			std::uniform_real_distribution<T> distr_(start_, end_);
-
-			std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
-				el_ = distr_(gen_);
-			});
-		}				
-	}
-
-	void XavierInitialization(const std::size_t& rows, const std::size_t& cols) {
+	void XavierInitialization(const std::size_t& rows,
+							  const std::size_t& cols,
+							  const std::size_t& layerInputSize,
+							  const std::size_t& layerOutputSize) {
 		ResizeMatrix_(rows, cols);
 
 		std::random_device rd_; // Obtain a random number from hardware
@@ -657,8 +632,8 @@ public:
 		
 		if (typeid(T) == typeid(int)) {
 			// Xavier initialization
-			int start_ = static_cast<int>( -sqrt(6 / (this->rowsCount_ + this->colsCount_)) );
-			int end_ = static_cast<int>( sqrt(6 / (this->rowsCount_ + this->colsCount_)) );
+			int start_ = static_cast<int>( -sqrt(6 / (layerInputSize + layerOutputSize)) );
+			int end_ = static_cast<int>( sqrt(6 / (layerInputSize + layerOutputSize)) );
 			std::uniform_int_distribution<> distr_(start_, end_);
 
 			std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
@@ -667,8 +642,8 @@ public:
 		}
 		else {
 			// Xavier initialization
-			T start_ = -sqrt(6.0 / (this->rowsCount_ + this->colsCount_));
-			T end_ = sqrt(6.0 / (this->rowsCount_ + this->colsCount_));			
+			T start_ = -sqrt(6.0 / (layerInputSize + layerOutputSize));
+			T end_ = sqrt(6.0 / (layerInputSize + layerOutputSize));			
 			std::uniform_real_distribution<T> distr_(start_, end_);
 
 			std::for_each(this->data_.begin(), this->data_.end(), [&](T& el_) {
