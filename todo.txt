@@ -18,7 +18,7 @@ Minor pro v0.1.X:
 - ❌ Overridnout operator "<<" u tridy Graph -> vypise strukturu grafu
 - ✅ Prejmenovat tridu Graph na tridu Network
 - ❌ Predelat nektere public metody (apply elementwise, hadamard) na staticke metody
-- ❗ metoda RandomInitialization() uvnitr Matrix.h je definovana pouze pro double typy
+- ✅ metoda XavierInitialization() uvnitr Matrix.h je definovana pouze pro double typy
     - kdyz se zavola s jinym typem, tak se provede implicitni konverze
 - ❌ const verze metod pro funkce
 - ❌ predelat Apply u aktivacnich funkci, aby braly jako parametr matici a ne skalar
@@ -28,6 +28,9 @@ Minor pro v0.1.X:
 - ❌ Preskladat poradi typu metod a properties ve vsech tridach - mit jedno dane poradi
 - ❌ Objekty by meli vracet hodnotou ne referenci svoje properties vs. velikost properties (obzvlast tech matic)
 - ❌ Pridat leaky ReLU
+- ✅ Prejmenovat XavierInitialization na XavierInitialization u Matrix
+- ❓ Zrusit u Matrix "*" operator a nahradit ho statickou funkci "dot"
+- ❓ Dava XavierInitialization u celociselne matice vubec nejaky smysl?
 =========
 
 Major pro 0.1.0:
@@ -73,7 +76,7 @@ Major pro 0.1.0:
     - ✅ konkretni aktivacni funkce
     - ✅ derivace aktivacnich funkci
 - ❌ previous layer vs. next layer (nazvoslovi v Graph class) 
-- ❌ exception u matrix class, kdyz nekdo chce instancovat matici, co ma pocet radku/sloupcu 0 (musi byt aspon 1)
+- ❓ exception u matrix class, kdyz nekdo chce instancovat matici, co ma pocet radku/sloupcu 0 (musi byt aspon 1?)
 - ❌ copy konstruktory ke vsemu
 - ❌ move konstruktory ke vsemu
 - ❌ move assignment operators

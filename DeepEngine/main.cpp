@@ -14,6 +14,7 @@
 #include "Functions/LossFunctions/MSELossFunction.h"
 
 typedef Functions::MSELossFunction<double> MSEDouble;
+typedef Functions::MSELossFunction<float> MSEFloat;
 typedef std::vector<double> D_Vector;
 
 int main() {
@@ -30,14 +31,15 @@ int main() {
 	Matrix<double> expectedOutput(4, 1);
 	expectedOutput.SetColumn(0, D_Vector{trueValue, falseValue, falseValue, falseValue});*/
 	
-	Network<double, MSEDouble> n;
-	n.AddLayer<Layers::ReluLayer<double>>(1); // Hidden layer	
+	Network<float, MSEFloat> n;
+	n.AddLayer<Layers::ReluLayer<float>>(1); // Hidden layer	
 
-	Matrix<double> input("/Users/vasekmlejnsky/Desktop/input.txt", ';');
-	Matrix<double> expectedOutput("/Users/vasekmlejnsky/Desktop/expected.txt", ';');
+	Matrix<float> input("/Users/vasekmlejnsky/Desktop/input.txt", ';');
+	Matrix<float> expectedOutput("/Users/vasekmlejnsky/Desktop/expected.txt", ';');
+	
 
 	int i = 0;
-	while (i < 10000) {
+	while (i < 1000) {
 		/*std::cout << "Epoch: " << std::to_string(i) << std::endl;*/
 
 		const auto& targets_ = n.Train(input, expectedOutput);
@@ -45,11 +47,11 @@ int main() {
 		const auto& predictions_ = std::get<1>(targets_);
 
 		std::cout << "Loss train: " << std::to_string(loss_) << std::endl;
-		std::cout << predictions_ << std::endl;
+		/*std::cout << predictions_ << std::endl;*/
 
-		const auto& testTargets_ = n.Evaluate(input, expectedOutput);
+		/*const auto& testTargets_ = n.Evaluate(input, expectedOutput);
 		const auto& testLoss_ = std::get<0>(testTargets_);
-		/*std::cout << "Loss test: " << std::to_string(testLoss_) << std::endl;*/
+		std::cout << "Loss test: " << std::to_string(testLoss_) << std::endl;*/
 		/*std::cout << "===" << std::endl;*/
 		++i;
 	}	
