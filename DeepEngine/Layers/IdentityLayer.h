@@ -14,6 +14,7 @@ namespace Layers {
         IdentityLayer(Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
             SetActivationFunction_(); 
         }
+        ~IdentityLayer() { }
 
     /* Public Methods */      
     private:

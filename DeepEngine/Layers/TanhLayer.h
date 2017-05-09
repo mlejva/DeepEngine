@@ -16,6 +16,7 @@ namespace Layers {
         TanhLayer(Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
             SetActivationFunction_(); 
         }
+        ~TanhLayer() { }
 
     /* Public Methods */      
     private:

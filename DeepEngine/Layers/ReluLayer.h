@@ -7,15 +7,16 @@
 
 namespace Layers {
     template <typename T>
-    class LReluLayer : public Layers::LayerInterface<T> {
+    class ReluLayer : public Layers::LayerInterface<T> {
     private:
         typedef Layers::LayerInterface<T> base;
     
     /* Constructors & Destructor */
     public:
-        LReluLayer(Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
+        ReluLayer(Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
             SetActivationFunction_(); 
-        }        
+        }
+        ~ReluLayer() { }
 
     /* Public Methods */      
     private:

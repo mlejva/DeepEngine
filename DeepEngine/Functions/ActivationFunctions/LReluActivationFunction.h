@@ -19,12 +19,12 @@ namespace Functions {
 			return std::max<T>(0, param);
 		}
 
-		Matrix<T> Derivative(Matrix<T>& param, double threshold = 0.01) {
+		Matrix<T> Derivative(Matrix<T>& param) {
             std::for_each(param.GetDataBegin(), param.GetDataEnd(), [&](T& el_) {
                 if (el_ > 0.0)
 					el_ = 1.0;
 				else
-					el_ = threshold;
+					el_ = 0.01;
             });			
 			return param;
 		}
