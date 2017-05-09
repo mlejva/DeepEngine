@@ -593,10 +593,10 @@ public:
 	Matrix<T> GetRowsFromIndex(const std::size_t& startIndex, const std::size_t& totalRows) {
 		if (startIndex > (rowsCount_ - 1) || startIndex < 0) {
 			throw IndexException("You are trying to get rows starting from index " + 
-										std::to_string(startIndex) + 
-										". Matrix has only " + 
-										std::to_string(rowsCount_) +
-										" rows.");
+									std::to_string(startIndex) + 
+								 	". Matrix has only " + 
+								 	std::to_string(rowsCount_) +
+								 	" rows.");
 		}
 		Matrix<T> m(totalRows, this->colsCount_);
 
