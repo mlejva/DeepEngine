@@ -593,17 +593,19 @@ public:
 	Matrix<T> GetRowsFromIndex(const std::size_t& startIndex, const std::size_t& totalRows) {
 		if (startIndex > (rowsCount_ - 1) || startIndex < 0) {
 			throw IndexException("You are trying to get rows starting from index " + 
-										std::to_string(startIndex) + 
-										". Matrix has only " + 
-										std::to_string(rowsCount_) +
-										" rows.");
+									std::to_string(startIndex) + 
+								 	". Matrix has only " + 
+								 	std::to_string(rowsCount_) +
+								 	" rows.");
 		}
-		Matrix<T> m(totalRows, this->colsCount_);
 
 		// If endIndex is greater than (startIndex + totalRows) return all possible rows
 		std::size_t endIndex_ = startIndex + totalRows;
 		if (endIndex_ > (rowsCount_ - 1))
-			endIndex_ = (rowsCount_ - 1);
+			endIndex_ = rowsCount_;
+
+		std::size_t totalRowsInNewMatrix_ = endIndex_ - startIndex;
+		Matrix<T> m(totalRowsInNewMatrix_, this->colsCount_);
 
 		std::size_t i = 0;
 		for (std::size_t rowIndex = startIndex; rowIndex < endIndex_; ++rowIndex) {			
@@ -614,12 +616,26 @@ public:
 	}
 
 	const Matrix<T> GetRowsFromIndex(const std::size_t& startIndex, const std::size_t& totalRows) const {
-		Matrix<T> m(totalRows, this->colsCount_);
-		
+		if (startIndex > (rowsCount_ - 1) || startIndex < 0) {
+			throw IndexException("You are trying to get rows starting from index " + 
+									std::to_string(startIndex) + 
+								 	". Matrix has only " + 
+								 	std::to_string(rowsCount_) +
+								 	" rows.");
+		}
+
+		// If endIndex is greater than (startIndex + totalRows) return all possible rows
+		std::size_t endIndex_ = startIndex + totalRows;
+		if (endIndex_ > (rowsCount_ - 1))
+			endIndex_ = rowsCount_;
+
+		std::size_t totalRowsInNewMatrix_ = endIndex_ - startIndex;
+		Matrix<T> m(totalRowsInNewMatrix_, this->colsCount_);
+
 		std::size_t i = 0;
-        for (std::size_t rowIndex = startIndex; rowIndex < startIndex + totalRows; ++rowIndex) {
+		for (std::size_t rowIndex = startIndex; rowIndex < endIndex_; ++rowIndex) {			
 			m.SetRow(i, this->GetRow(rowIndex));
-			i++;
+			i++;			
 		}
 		return m;
 	}
