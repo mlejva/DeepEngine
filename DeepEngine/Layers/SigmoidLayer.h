@@ -14,6 +14,7 @@ namespace Layers {
         SigmoidLayer(Matrix<T>& input, const std::size_t& outputSize) : base(input, outputSize) { 
             SetActivationFunction_(); 
         }
+        ~SigmoidLayer() { }
 
     /* Public Methods */      
     private:

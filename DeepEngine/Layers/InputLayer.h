@@ -16,6 +16,7 @@ namespace Layers {
         InputLayer(Matrix<T>& input) : base(input, 0, true) { 
             SetActivationFunction_(); 
         }
+        ~InputLayer() { }
     
     /* Public Methods */      
     private:
