@@ -19,11 +19,17 @@ typedef Functions::MSELossFunction<float> MSEFloat;
 typedef std::vector<double> D_Vector;
 
 int main() {
-
-
 	
 	double trueValue = 1.0;
 	double falseValue = -1.0; 
+
+	Matrix<int> testovaci(3, 1);
+	testovaci.InitializeWithOnes();
+	testovaci(2, 0) = 5;
+
+	auto nova = testovaci.GetRowsFromIndex(2, 2);
+
+	std::cout << nova << std::endl;
 
 	/*Matrix<double> input(4, 2);
 	input.SetRow(0, D_Vector{trueValue, trueValue});
@@ -45,11 +51,11 @@ int main() {
 	while (i < 10) {
 		/*std::cout << "Epoch: " << std::to_string(i) << std::endl;*/
 
-		const auto& targets_ = n.Train(input, expectedOutput);
+		/*const auto& targets_ = n.Train(input, expectedOutput);
 		auto& loss_ = std::get<0>(targets_);
 		const auto& predictions_ = std::get<1>(targets_);
 
-		std::cout << "Loss train: " << std::to_string(loss_) << std::endl;
+		std::cout << "Loss train: " << std::to_string(loss_) << std::endl;*/
 		/*std::cout << predictions_ << std::endl;*/
 
 		/*const auto& testTargets_ = n.Evaluate(input, expectedOutput);
