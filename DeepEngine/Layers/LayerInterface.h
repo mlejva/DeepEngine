@@ -41,8 +41,8 @@ namespace Layers {
         virtual void SetActivationFunction_() = 0;
         void ApplyActivationFunction_() {                  
             if (isInputLayer_) {
-                zValue_.ReshapeWithMatrix(input_);
-                output_ = zValue_;
+                zValue_.ReshapeWithMatrix(input_);                
+                output_.ReshapeWithMatrix(zValue_);
             }
             else {
                 // Initialize weights while traversing layers for the first time
@@ -54,8 +54,8 @@ namespace Layers {
                     areWeightsInitialized_ = true;   
                 }
                 zValue_.ReshapeWithMatrix(input_ * weights_);
-
-                output_ = zValue_;
+                
+                output_.ReshapeWithMatrix(zValue_);
                 for (std::size_t row = 0; row < output_.GetRowsCount(); ++row) {
                     for (std::size_t col = 0; col < output_.GetColsCount(); ++col) {
                         T& el_ = output_(row, col);                        
@@ -77,8 +77,12 @@ namespace Layers {
             ApplyActivationFunction_(); 
         }
         
-        void Initialize(const Matrix<T>& input) {
-            input_ = input;            
+        void Initialize(const Matrix<T>& input) {        
+            // ReshapeWithMatrix must be used instea "=" operator 
+            // because last batch can have smaller size and using
+            // "=" operator would throw an exception because of
+            // trying to assign to a matrix of a different shape
+            input_.ReshapeWithMatrix(input);
         }
         
         const Matrix<T> ComputeLayerError(const Matrix<T>& previousLayerError, const std::size_t& inputIndex) {                   
