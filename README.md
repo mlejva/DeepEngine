@@ -1,7 +1,9 @@
 # Deep Engine
 ## Version 0.2.0
 
-Deep Engine is a library for building simple feed-forward neural networks
+Deep Engine is a library for building simple feed-forward neural networks.
+
+Used in [DeepBoard](https://github.com/mlejva/DeepBoard) - a visual interface for building neural networks
 
 
 Usage
